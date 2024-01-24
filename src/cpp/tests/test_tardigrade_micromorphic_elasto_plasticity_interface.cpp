@@ -156,36 +156,61 @@ BOOST_AUTO_TEST_CASE( testMaterialLibraryInterface ){
     //Initialize the output message string
     std::string output_message;
 
-#ifdef DEBUG_MODE
-    tardigradeSolverTools::homotopyMap DEBUG;
-#endif
+// Old approach
+//    tardigradeSolverTools::floatVector PK2_answer = { 172.484,   15.3785,   -0.917177,
+//                                             13.4848, 142.823,    -0.0214307,
+//                                             -1.7635,   1.77719, 141.069 };
+//
+//    tardigradeSolverTools::floatVector SIGMA_answer = { 176.916,   15.8646,   -2.83731,
+//                                               15.8646, 144.538,     1.85836,
+//                                               -2.83731,  1.85836, 142.013 };
+//
+//    tardigradeSolverTools::floatVector M_answer = { 0.598283, -0.512218,  0.620664,    3.22636,   1.16682,
+//                                          1.20593,   0.562825, -2.52317,     1.62616,  -2.61391,
+//                                         -0.60994,  -1.02147,   0.668187,    0.49348,  -0.23916,
+//                                         -2.77419,   0.760483,  1.71784,    -0.499389,  2.62828,
+//                                         -0.761044,  1.23369,  -0.00778206, -2.25643,  -0.729551,
+//                                          0.743204,  0.910521 };
+//
+//    tardigradeSolverTools::floatVector SDVS_answer = { -1.79592e-24,  0.0243222,    0.0822384,    0.0430345,   0.0435752,
+//                                             -8.96006e-25,  0.00852191,   0.0465339,    0.0243507,   0.0246566,
+//                                              0.00742998,   0.00500421,  -0.000296486,  0.00498757, -0.00260492,
+//                                              0.000284355, -0.000367318,  0.000222511, -0.0015603,   0.00863313,
+//                                              0.00537105,  -0.000347686,  0.00643802,  -0.00298667,  0.000297105,
+//                                             -0.000422398,  0.000293946, -0.00181986,   0.0385522,  -0.0244021,
+//                                             -0.00912035,   0.0105171,   -0.000328615,  0.0222843,   0.0185626,
+//                                             -0.0118234,   -0.00785555,   0.0451085,    0.031607,    0.0212748,
+//                                              0.0116981,    0.0161821,    0.00126031,   0.0147688,   0.00691805,
+//                                             -0.0241431,    0.00942608,  -0.0350366,    0.0221571,  -0.0249697,
+//                                              0.00935849,   0.0214931,    0.0169609,    0.0177352,   0.0203838 };
 
-    tardigradeSolverTools::floatVector PK2_answer = { 172.484,   15.3785,   -0.917177,
-                                             13.4848, 142.823,    -0.0214307,
-                                             -1.7635,   1.77719, 141.069 };
+// Hydra approach
+    tardigradeSolverTools::floatVector PK2_answer = { 176.85219663,  11.80698447,  -0.42826398,
+                                                        9.69466718, 154.70890135,  -0.34866071,
+                                                       -1.32423993,   1.55229825, 152.89259867 };
 
-    tardigradeSolverTools::floatVector SIGMA_answer = { 176.916,   15.8646,   -2.83731,
-                                               15.8646, 144.538,     1.85836,
-                                               -2.83731,  1.85836, 142.013 };
+    tardigradeSolverTools::floatVector SIGMA_answer = { 179.90985149,  12.12517822,  -2.34267185,
+                                                         12.12517822, 155.18595135,   1.57329507,
+                                                         -2.34267185,   1.57329507, 152.67097908 };
 
-    tardigradeSolverTools::floatVector M_answer = { 0.598283, -0.512218,  0.620664,    3.22636,   1.16682,
-                                          1.20593,   0.562825, -2.52317,     1.62616,  -2.61391,
-                                         -0.60994,  -1.02147,   0.668187,    0.49348,  -0.23916,
-                                         -2.77419,   0.760483,  1.71784,    -0.499389,  2.62828,
-                                         -0.761044,  1.23369,  -0.00778206, -2.25643,  -0.729551,
-                                          0.743204,  0.910521 };
+    tardigradeSolverTools::floatVector M_answer = { 0.55375154, -0.53513182,  0.64105973,  3.02610427,  1.18082958,
+                                                    1.15933657,  0.60697669, -2.62337981,  1.55437107, -2.49773592,
+                                                   -0.69264839, -0.86588199,  0.70376012,  0.44225752, -0.21927807,
+                                                   -2.77735624,  0.95102462,  1.70382866, -0.48471999,  2.69244538,
+                                                   -0.62391716,  1.1710374 , -0.10182978, -2.27621329, -0.7875813 ,
+                                                    0.752404  ,  0.99367537 };
 
-    tardigradeSolverTools::floatVector SDVS_answer = { -1.79592e-24,  0.0243222,    0.0822384,    0.0430345,   0.0435752,
-                                             -8.96006e-25,  0.00852191,   0.0465339,    0.0243507,   0.0246566,
-                                              0.00742998,   0.00500421,  -0.000296486,  0.00498757, -0.00260492,
-                                              0.000284355, -0.000367318,  0.000222511, -0.0015603,   0.00863313,
-                                              0.00537105,  -0.000347686,  0.00643802,  -0.00298667,  0.000297105,
-                                             -0.000422398,  0.000293946, -0.00181986,   0.0385522,  -0.0244021,
-                                             -0.00912035,   0.0105171,   -0.000328615,  0.0222843,   0.0185626,
-                                             -0.0118234,   -0.00785555,   0.0451085,    0.031607,    0.0212748,
-                                              0.0116981,    0.0161821,    0.00126031,   0.0147688,   0.00691805,
-                                             -0.0241431,    0.00942608,  -0.0350366,    0.0221571,  -0.0249697,
-                                              0.00935849,   0.0214931,    0.0169609,    0.0177352,   0.0203838 };
+    tardigradeSolverTools::floatVector SDVS_answer = { 0.00988018 ,  0.011861  , -0.000863237,  0.0110431  , -0.0133071 ,
+                                                       0.000535357, -0.00150177,  0.00111378 , -0.0115157  ,  0.0419332 ,
+                                                       0.0248495  , -0.00137643,  0.0300679  , -0.012865   ,  0.00100127,
+                                                      -0.00166548 ,  0.00100127, -0.00863817 ,  0.0524155  , -0.0192113 ,
+                                                      -0.0190793  ,  0.0137043 ,  0.0109677  ,  0.0343499  ,  0.0171499 ,
+                                                      -0.0366952  , -0.0208241 ,  0.0284659  ,  1.45232e-05,  0.034603  ,
+                                                       0.00526692 ,  0.0108779 ,  0.0137381  ,  0.0140525  , -0.00342129,
+                                                      -0.0290165  ,  0.0155877 , -0.0185748  ,  0.0431296  , -0.0287399 ,
+                                                       0.0195558  ,  0.0308138 ,  0.0160433  ,  0.0167955  ,  0.0198817 ,
+                                                      -0.031206   ,  0.0553656 ,  0.0604235  ,  0.0343974  ,  0.0310536 ,
+                                                      -0.0521235  ,  0.11287   ,  0.0821425  ,  0.0467614  ,  0.0422157 };
 
     std::vector< double > SDVS = SDVSDefault;
 
@@ -201,9 +226,6 @@ BOOST_AUTO_TEST_CASE( testMaterialLibraryInterface ){
                                               PK2_result, SIGMA_result, M_result,
                                               ADD_TERMS,
                                               output_message
-#ifdef DEBUG_MODE
-                                              , DEBUG
-#endif
                                             );
 
     BOOST_CHECK( errorCode == 0 );
@@ -225,11 +247,8 @@ BOOST_AUTO_TEST_CASE( testMaterialLibraryInterface ){
 
     SDVS = SDVSDefault;
 
-#ifdef DEBUG_MODE
-    DEBUG.clear();
-#endif
-
-    errorCode = tardigradeMicromorphicElastoPlasticity::evaluate_model(
+//    errorCode = tardigradeMicromorphicElastoPlasticity::evaluate_model(
+    errorCode = tardigradeMicromorphicElastoPlasticity::evaluate_hydra_model(
                                 time, fparams,
                                 current_grad_u, current_phi, current_grad_phi,
                                 previous_grad_u, previous_phi, previous_grad_phi,
@@ -242,9 +261,6 @@ BOOST_AUTO_TEST_CASE( testMaterialLibraryInterface ){
                                 DMDgrad_u_answer, DMDphi_answer, DMDgrad_phi_answer,
                                 ADD_TERMS, ADD_JACOBIANS,
                                 output_message
-#ifdef DEBUG_MODE
-                                , DEBUG
-#endif
                               );
 
     BOOST_CHECK( errorCode <= 0 );
@@ -271,9 +287,6 @@ BOOST_AUTO_TEST_CASE( testMaterialLibraryInterface ){
                                           DMDgrad_u_result, DMDphi_result, DMDgrad_phi_result,
                                           ADD_TERMS, ADD_JACOBIANS,
                                           output_message
-#ifdef DEBUG_MODE
-                                          , DEBUG
-#endif
                                         );
 
     BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( PK2_result, PK2_answer, 1e-5, 1e-5 ) );
@@ -302,10 +315,6 @@ BOOST_AUTO_TEST_CASE( testMaterialLibraryInterface ){
 
     BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( DMDgrad_phi_result, DMDgrad_phi_answer ) );
 
-#ifdef DEBUG_MODE
-    DEBUG.clear();
-#endif
-
     //Test the computed numeric Jacobian values
     SDVS = SDVSDefault;
     errorCode = material->evaluate_model_numeric_gradients( time, fparams,
@@ -320,9 +329,6 @@ BOOST_AUTO_TEST_CASE( testMaterialLibraryInterface ){
                                                             DMDgrad_u_result, DMDphi_result, DMDgrad_phi_result,
                                                             ADD_TERMS, ADD_JACOBIANS,
                                                             output_message,
-#ifdef DEBUG_MODE
-                                                            DEBUG,
-#endif
                                                             1e-6 );
 
     BOOST_CHECK( errorCode <= 0 );
@@ -443,10 +449,6 @@ BOOST_AUTO_TEST_CASE( testMaterialLibraryInterface2 ){
     //Initialize the output message string
     std::string output_message;
 
-#ifdef DEBUG_MODE
-    tardigradeSolverTools::homotopyMap DEBUG;
-#endif
-
     std::vector< double > SDVS = SDVSDefault;
 
     std::vector< double > PK2_result, SIGMA_result, M_result;
@@ -461,32 +463,9 @@ BOOST_AUTO_TEST_CASE( testMaterialLibraryInterface2 ){
                                               PK2_result, SIGMA_result, M_result,
                                               ADD_TERMS,
                                               output_message
-#ifdef DEBUG_MODE
-                                              , DEBUG
-#endif
                                             );
 
     BOOST_CHECK( errorCode <= 0 );
-
-//    std::cout << "SDVS:\n"; tardigradeVectorTools::print( SDVS );
-//    std::cout << "PK2:\n"; tardigradeVectorTools::print( PK2_result );
-//    std::cout << "SIGMA:\n"; tardigradeVectorTools::print( SIGMA_result );
-//    std::cout << "M:\n"; tardigradeVectorTools::print( M_result );
-
-#ifdef DEBUG_MODE
-    for ( auto step = DEBUG.begin(); step != DEBUG.end(); step++ ){
-        std::cout << step->first << "\n";
-        for ( auto iteration = step->second.begin(); iteration != step->second.end(); iteration++ ){
-            std::cout << "    " << iteration->first << "\n";
-            for ( auto value = iteration->second.begin(); value != iteration->second.end(); value++ ){
-                if ( value->second.size() <= 27 ) {
-                    std::cout << "        " << value->first << "\n";
-                    std::cout << "            "; tardigradeVectorTools::print( value->second );
-                }
-            }
-        }
-    }
-#endif
 
 }
 
@@ -495,11 +474,6 @@ BOOST_AUTO_TEST_CASE( testEvaluate_model_history ){
      * Test the material model undergoing a time history.
      *
      */
-
-#ifdef DEBUG_MODE
-    std::ofstream output_file;
-    output_file.open( "output_file.txt" );
-#endif
 
     //Initialize the model
     std::string _model_name = "LinearElasticityDruckerPragerPlasticity";
@@ -583,40 +557,34 @@ BOOST_AUTO_TEST_CASE( testEvaluate_model_history ){
     //Initialize the output message string
     std::string output_message;
 
-#ifdef DEBUG_MODE
-    tardigradeSolverTools::homotopyMap DEBUG;
-#endif
-
     std::vector< double > SDVS = SDVSDefault;
 
     std::vector< double > PK2_result, SIGMA_result, M_result;
 
-    std::vector< double > PK2Answer = {  5.16027494e+03, -4.30718970e-18,  4.23714575e-18,
-                                        -4.30349349e-18,  4.05236467e+03, -1.78599775e-18,
-                                         4.25600330e-18, -1.80293236e-18,  4.05236467e+03 };
+    std::vector< double > PK2Answer   = { 5.16350e+03, -3.00694e-17, -4.15205e-17,
+                                         -2.94815e-17,  4.05388e+03,  3.19499e-17,
+                                         -4.21351e-17,  3.07368e-17,  4.05388e+03 };
 
-    std::vector< double > SIGMAAnswer = {  5051.82,     -4.38296e-18,  4.03864e-18,
-                                          -4.38296e-18,  4116.16,     -1.6831e-18,
-                                           4.03864e-18, -1.6831e-18,   4116.16 };
+    std::vector< double > SIGMAAnswer = { 5.06571e+03, -4.04083e-17, -3.78865e-17,
+                                         -3.90853e-17,  4.11088e+03,  7.82938e-18,
+                                         -3.63730e-17,  1.43787e-17,  4.11088e+03 };
 
-    std::vector< double > MAnswer = {  1.0019e-46,  -9.52574e-49,  1.00995e-48, -8.8467e-25,   8.11869e-46,
-                                      -5.63453e-34, -1.10865e-32,  2.44433e-34,  1.6875e-49,  -9.38296e-38,
-                                       4.14595e-47, -6.23442e-59, -1.42808e-16,  1.31056e-37, -9.48874e-38,
-                                      -8.77566e-16,  8.05349e-37, -5.83091e-37, -1.10003e-37, -1.80712e-47,
-                                       3.77743e-56, -1.06975e-37,  9.81714e-59, -1.63467e-56, -8.77566e-16,
-                                       8.05349e-37, -1.05373e-36 };
+    std::vector< double > MAnswer( 27, 0 );
 
-    std::vector< double > SDVSAnswer = { 0.0536436,    0.0316833,    0,            0,            0,
-                                         0.441627,     2.79534e-10,  0,            0,            0,
-                                         0.0406588,   -4.90538e-23,  6.74381e-23,  2.31867e-22, -0.0197043,
-                                        -2.04791e-23, -2.35533e-22,  8.57369e-23, -0.0197043,    0.0150881,
-                                        -5.35887e-23, -5.0789e-24,   2.923e-22,   -0.00745964,  -6.81252e-24,
-                                        -8.98761e-24,  1.5285e-24,  -0.00745964,   1.47911e-31, -4.70981e-22,
-                                        -1.60422e-39, -4.82898e-51,  1.54956e-54,  5.15605e-62,  2.70794e-38,
-                                         1.60531e-36,  1.84864e-40,  1.93673e-43, -1.471e-31,    2.93537e-22,
-                                         1.85391e-40,  4.83968e-64,  1.1391e-40,   5.43161e-38, -1.48104e-62,
-                                        -1.08569e-49, -2.16264e-24, -7.51219e-32,  1.97215e-31, -5.93004e-39,
-                                        -9.83265e-57,  2.94509e-61,  1.67967e-41, -1.14207e-61, -7.96338e-64 };
+    std::vector< double > SDVSAnswer = { 4.03683e-02,  3.55329e-21,  7.12965e-22, -2.10963e-21,
+                                        -1.95818e-02,  1.22340e-22,  7.98957e-22, -6.98456e-22,
+                                        -1.95818e-02,  1.07605e-02,  1.46563e-21, -2.59163e-22,
+                                         6.84998e-21, -5.30058e-03,  4.72773e-21, -4.80356e-22,
+                                         5.58748e-21, -5.30058e-03,  4.21892e-22,  5.95521e-22,
+                                         5.94044e-22,  7.77887e-22, -5.20839e-23,  3.50324e-24,
+                                         7.23258e-24,  3.52995e-24, -4.23086e-24,  1.34296e-23,
+                                         5.46166e-25,  6.86559e-24, -3.72983e-25, -6.95441e-25,
+                                        -2.45526e-25,  5.40325e-27, -1.01136e-24,  4.06927e-26,
+                                        -4.03804e-25, -8.94997e-25, -3.66759e-24, -3.66195e-25,
+                                        -1.59872e-24, -2.52535e-24,  1.64963e-25,  6.20733e-25,
+                                        -3.11079e-26, -2.39800e-01,  5.28270e-01, -1.47340e-25,
+                                         1.14879e-23, -5.57978e-34,  6.22567e-02,  2.25813e-02,
+                                        -1.36077e-24,  8.36356e-25,  3.56089e-26 };
 
     std::vector< std::vector< double > > grad_u_prev   = grad_u_0;
     std::vector< double > phi_prev                     = phi_0;
@@ -657,110 +625,9 @@ BOOST_AUTO_TEST_CASE( testEvaluate_model_history ){
                                               PK2_result, SIGMA_result, M_result,
                                               ADD_TERMS,
                                               output_message
-#ifdef DEBUG_MODE
-                                              , DEBUG
-#endif
                                             );
    
     BOOST_CHECK( errorCode <= 0);
-#ifdef DEBUG_MODE
-    if( errorCode > 0 ){ 
-        output_file.close();
-    }
-#endif
-
-#ifdef DEBUG_MODE
-    output_file << "NEW_INCREMENT\n";
-
-    //Output the time
-    output_file << time[ 0 ] << ", " << time[ 1 ] << "\n";
-
-    //Output the current gradient of u
-    output_file << current_grad_u[ 0 ][ 0 ] << ", " << current_grad_u[ 0 ][ 1 ] << ", " << current_grad_u[ 0 ][ 2 ] << ", "
-                << current_grad_u[ 1 ][ 0 ] << ", " << current_grad_u[ 1 ][ 1 ] << ", " << current_grad_u[ 1 ][ 2 ] << ", "
-                << current_grad_u[ 2 ][ 0 ] << ", " << current_grad_u[ 2 ][ 1 ] << ", " << current_grad_u[ 2 ][ 2 ] << "\n";
-
-    //Output the current micro displacement
-    output_file << current_phi[ 0 ] << ", " << current_phi[ 1 ] << ", " << current_phi[ 2 ] << ", "
-                << current_phi[ 3 ] << ", " << current_phi[ 4 ] << ", " << current_phi[ 5 ] << ", "
-                << current_phi[ 6 ] << ", " << current_phi[ 7 ] << ", " << current_phi[ 8 ] << "\n";
-
-    //Output the current gradient of the micro displacement
-    output_file << current_grad_phi[ 0 ][ 0 ] << ", " << current_grad_phi[ 0 ][ 1 ] << ", " << current_grad_phi[ 0 ][ 2 ] << ", "
-                << current_grad_phi[ 1 ][ 0 ] << ", " << current_grad_phi[ 1 ][ 1 ] << ", " << current_grad_phi[ 1 ][ 2 ] << ", "
-                << current_grad_phi[ 2 ][ 0 ] << ", " << current_grad_phi[ 2 ][ 1 ] << ", " << current_grad_phi[ 2 ][ 2 ] << ", "
-                << current_grad_phi[ 3 ][ 0 ] << ", " << current_grad_phi[ 3 ][ 1 ] << ", " << current_grad_phi[ 3 ][ 2 ] << ", "
-                << current_grad_phi[ 4 ][ 0 ] << ", " << current_grad_phi[ 4 ][ 1 ] << ", " << current_grad_phi[ 4 ][ 2 ] << ", "
-                << current_grad_phi[ 5 ][ 0 ] << ", " << current_grad_phi[ 5 ][ 1 ] << ", " << current_grad_phi[ 5 ][ 2 ] << ", "
-                << current_grad_phi[ 6 ][ 0 ] << ", " << current_grad_phi[ 6 ][ 1 ] << ", " << current_grad_phi[ 6 ][ 2 ] << ", "
-                << current_grad_phi[ 7 ][ 0 ] << ", " << current_grad_phi[ 7 ][ 1 ] << ", " << current_grad_phi[ 7 ][ 2 ] << ", "
-                << current_grad_phi[ 8 ][ 0 ] << ", " << current_grad_phi[ 8 ][ 1 ] << ", " << current_grad_phi[ 8 ][ 2 ] << "\n";
-
-    //Output the PK2 stress
-    output_file << PK2_result[ 0 ] << ", " << PK2_result[ 1 ] << ", " << PK2_result[ 2 ] << ", "
-                << PK2_result[ 3 ] << ", " << PK2_result[ 4 ] << ", " << PK2_result[ 5 ] << ", "
-                << PK2_result[ 6 ] << ", " << PK2_result[ 7 ] << ", " << PK2_result[ 8 ] << "\n";
-
-    //Output the SIGMA stress
-    output_file << SIGMA_result[ 0 ] << ", " << SIGMA_result[ 1 ] << ", " << SIGMA_result[ 2 ] << ", "
-                << SIGMA_result[ 3 ] << ", " << SIGMA_result[ 4 ] << ", " << SIGMA_result[ 5 ] << ", "
-                << SIGMA_result[ 6 ] << ", " << SIGMA_result[ 7 ] << ", " << SIGMA_result[ 8 ] << "\n";
-
-    //Output the M stress
-    output_file << M_result[  0 ] << ", " << M_result[  1 ] << ", " << M_result[  2 ] << ", "
-                << M_result[  3 ] << ", " << M_result[  4 ] << ", " << M_result[  5 ] << ", "
-                << M_result[  6 ] << ", " << M_result[  7 ] << ", " << M_result[  8 ] << ", "
-                << M_result[  9 ] << ", " << M_result[ 10 ] << ", " << M_result[ 11 ] << ", "
-                << M_result[ 12 ] << ", " << M_result[ 13 ] << ", " << M_result[ 14 ] << ", "
-                << M_result[ 15 ] << ", " << M_result[ 16 ] << ", " << M_result[ 17 ] << ", "
-                << M_result[ 18 ] << ", " << M_result[ 19 ] << ", " << M_result[ 20 ] << ", "
-                << M_result[ 21 ] << ", " << M_result[ 22 ] << ", " << M_result[ 23 ] << ", "
-                << M_result[ 24 ] << ", " << M_result[ 25 ] << ", " << M_result[ 26 ] << "\n";
-
-    std::vector< double > PK2_intermediate, SIGMA_intermediate, M_intermediate;
-
-    //Determine if there were non-linear iterations
-    auto inc = DEBUG.find( "converged_values" );
-    if ( inc != DEBUG.end() ){
-        PK2_intermediate   = DEBUG[ "converged_values" ][ "converged_values" ][ "intermediatePK2Stress" ];
-        SIGMA_intermediate = DEBUG[ "converged_values" ][ "converged_values" ][ "intermediateReferenceMicroStress" ];
-        M_intermediate     = DEBUG[ "converged_values" ][ "converged_values" ][ "intermediateReferenceHigherOrderStress" ];
-    }
-    else{
-        PK2_intermediate   = DEBUG[ "pre_iteration_values" ][ "pre_iteration_values" ][ "intermediatePK2Stress" ];
-        SIGMA_intermediate = DEBUG[ "pre_iteration_values" ][ "pre_iteration_values" ][ "intermediateReferenceMicroStress" ];
-        M_intermediate     = DEBUG[ "pre_iteration_values" ][ "pre_iteration_values" ][ "intermediateReferenceHigherOrderStress" ];
-    }
-
-    //Output the intermediate PK2 stress
-    output_file << PK2_intermediate[ 0 ] << ", " << PK2_intermediate[ 1 ] << ", " << PK2_intermediate[ 2 ] << ", "
-                << PK2_intermediate[ 3 ] << ", " << PK2_intermediate[ 4 ] << ", " << PK2_intermediate[ 5 ] << ", "
-                << PK2_intermediate[ 6 ] << ", " << PK2_intermediate[ 7 ] << ", " << PK2_intermediate[ 8 ] << "\n";
-
-    //Output the intermediate SIGMA stress
-    output_file << SIGMA_intermediate[ 0 ] << ", " << SIGMA_intermediate[ 1 ] << ", " << SIGMA_intermediate[ 2 ] << ", "
-                << SIGMA_intermediate[ 3 ] << ", " << SIGMA_intermediate[ 4 ] << ", " << SIGMA_intermediate[ 5 ] << ", "
-                << SIGMA_intermediate[ 6 ] << ", " << SIGMA_intermediate[ 7 ] << ", " << SIGMA_intermediate[ 8 ] << "\n";
-
-    //Output the intermediate M stress
-    output_file << M_intermediate[  0 ] << ", " << M_intermediate[  1 ] << ", " << M_intermediate[  2 ] << ", "
-                << M_intermediate[  3 ] << ", " << M_intermediate[  4 ] << ", " << M_intermediate[  5 ] << ", "
-                << M_intermediate[  6 ] << ", " << M_intermediate[  7 ] << ", " << M_intermediate[  8 ] << ", "
-                << M_intermediate[  9 ] << ", " << M_intermediate[ 10 ] << ", " << M_intermediate[ 11 ] << ", "
-                << M_intermediate[ 12 ] << ", " << M_intermediate[ 13 ] << ", " << M_intermediate[ 14 ] << ", "
-                << M_intermediate[ 15 ] << ", " << M_intermediate[ 16 ] << ", " << M_intermediate[ 17 ] << ", "
-                << M_intermediate[ 18 ] << ", " << M_intermediate[ 19 ] << ", " << M_intermediate[ 20 ] << ", "
-                << M_intermediate[ 21 ] << ", " << M_intermediate[ 22 ] << ", " << M_intermediate[ 23 ] << ", "
-                << M_intermediate[ 24 ] << ", " << M_intermediate[ 25 ] << ", " << M_intermediate[ 26 ] << "\n";
-
-    //Output the state variables
-    for ( unsigned int i = 0; i < SDVS.size()-1; i++ ){
-        output_file << SDVS[ i ] << ", ";
-    }
-    output_file << SDVS[ SDVS.size() - 1 ] << "\n";
-
-#endif
-
 
     //Begin iteration
     while ( t + dt < tf ){
@@ -791,9 +658,6 @@ BOOST_AUTO_TEST_CASE( testEvaluate_model_history ){
         }
 
         //Evaluate the model
-#ifdef DEBUG_MODE
-        DEBUG.clear();
-#endif
         int errorCode = material->evaluate_model( time, fparams,
                                                   current_grad_u, current_phi, current_grad_phi,
                                                   previous_grad_u, previous_phi, previous_grad_phi,
@@ -803,169 +667,11 @@ BOOST_AUTO_TEST_CASE( testEvaluate_model_history ){
                                                   PK2_result, SIGMA_result, M_result,
                                                   ADD_TERMS,
                                                   output_message
-#ifdef DEBUG_MODE
-                                                  , DEBUG
-#endif
                                                 );
 
-//        std::cout << "SDVS:\n"; tardigradeVectorTools::print( SDVS );
-
-#ifdef DEBUG_MODE
-
-//        if ( ( fabs( SDVS[ 0 ] ) > 1e-8 ) || ( errorCode != 0 ) ){
-//            for ( auto inc = DEBUG.begin(); inc != DEBUG.end(); inc++ ){
-//                std::cout << inc->first << "\n";
-//                for ( auto itr = inc->second.begin(); itr != inc->second.end(); itr++ ){
-//                    if ( itr->first.compare( "converged_values" ) != 0 ){
-//                        std::cout << "    " << itr->first << "\n";
-//                        std::cout << "        currentMacroGamma:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "currentMacroGamma" ] );
-//                        std::cout << "        currentMicroGamma:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "currentMicroGamma" ] );
-//                        std::cout << "        currentMicroGradientGamma:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "currentMicroGradientGamma" ] );
-//                        std::cout << "        currentDeformationGradient:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "currentDeformationGradient" ] );
-//                        std::cout << "        currentElasticDeformationGradient:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "currentElasticDeformationGradient" ] );
-//                        std::cout << "        currentPlasticDeformationGradient:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "currentPlasticDeformationGradient" ] );
-//                        std::cout << "        currentPK2Stress:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "currentPK2Stress" ] );
-//                        std::cout << "        currentMacroCohesion:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "currentMacroCohesion" ] );
-//                        std::cout << "        dMacroCohesiondMacroStrainISV:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "dMacroCohesiondMacroStrainISV" ] );
-//                        std::cout << "        previousMacroFlowDirection:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "previousMacroFlowDirection" ] );
-//                        std::cout << "        previousMicroFlowDirection:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "previousMicroFlowDirection" ] );
-//                        std::cout << "        previousMicroGradientFlowDirection:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "previousMicroGradientFlowDirection" ] );
-//                        std::cout << "        currentMacroFlowDirection:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "currentMacroFlowDirection" ] );
-//                        std::cout << "        currentMicroFlowDirection:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "currentMicroFlowDirection" ] );
-//                        std::cout << "        currentMicroGradientFlowDirection:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "currentMicroGradientFlowDirection" ] );
-//                        std::cout << "        currentMacroStrainISV\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "currentMacroStrainISV" ] );
-//                        std::cout << "        currentMicroStrainISV\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "currentMicroStrainISV" ] );
-//                        std::cout << "        currentMicroGradientStrainISV\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "currentMicroGradientStrainISV" ] );
-//                        std::cout << "        macroYieldFunction:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "macroYieldFunction" ] );
-//                        std::cout << "        microYieldFunction:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "microYieldFunction" ] );
-//                        std::cout << "        microGradientYieldFunction:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "microGradientYieldFunction" ] );
-//                    }
-//                    else{
-//                        std::cout << "        convergedPlasticDeformationGradient:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "convergedPlasticDeformationGradient" ] );
-//                        std::cout << "        convergedPlasticMicroDeformation:\n";
-//                        std::cout << "        "; tardigradeVectorTools::print( itr->second[ "convergedPlasticMicroDeformation" ] );
-//                    }
-//                }
-//            }
-//        }
-//
-        output_file << "NEW_INCREMENT\n";
-
-        //Output the time
-        output_file << time[ 0 ] << ", " << time[ 1 ] << "\n";
-
-        //Output the current gradient of u
-        output_file << current_grad_u[ 0 ][ 0 ] << ", " << current_grad_u[ 0 ][ 1 ] << ", " << current_grad_u[ 0 ][ 2 ] << ", "
-                    << current_grad_u[ 1 ][ 0 ] << ", " << current_grad_u[ 1 ][ 1 ] << ", " << current_grad_u[ 1 ][ 2 ] << ", "
-                    << current_grad_u[ 2 ][ 0 ] << ", " << current_grad_u[ 2 ][ 1 ] << ", " << current_grad_u[ 2 ][ 2 ] << "\n";
-
-        //Output the current micro displacement
-        output_file << current_phi[ 0 ] << ", " << current_phi[ 1 ] << ", " << current_phi[ 2 ] << ", "
-                    << current_phi[ 3 ] << ", " << current_phi[ 4 ] << ", " << current_phi[ 5 ] << ", "
-                    << current_phi[ 6 ] << ", " << current_phi[ 7 ] << ", " << current_phi[ 8 ] << "\n";
-
-        //Output the current gradient of the micro displacement
-        output_file << current_grad_phi[ 0 ][ 0 ] << ", " << current_grad_phi[ 0 ][ 1 ] << ", " << current_grad_phi[ 0 ][ 2 ] << ", "
-                    << current_grad_phi[ 1 ][ 0 ] << ", " << current_grad_phi[ 1 ][ 1 ] << ", " << current_grad_phi[ 1 ][ 2 ] << ", "
-                    << current_grad_phi[ 2 ][ 0 ] << ", " << current_grad_phi[ 2 ][ 1 ] << ", " << current_grad_phi[ 2 ][ 2 ] << ", "
-                    << current_grad_phi[ 3 ][ 0 ] << ", " << current_grad_phi[ 3 ][ 1 ] << ", " << current_grad_phi[ 3 ][ 2 ] << ", "
-                    << current_grad_phi[ 4 ][ 0 ] << ", " << current_grad_phi[ 4 ][ 1 ] << ", " << current_grad_phi[ 4 ][ 2 ] << ", "
-                    << current_grad_phi[ 5 ][ 0 ] << ", " << current_grad_phi[ 5 ][ 1 ] << ", " << current_grad_phi[ 5 ][ 2 ] << ", "
-                    << current_grad_phi[ 6 ][ 0 ] << ", " << current_grad_phi[ 6 ][ 1 ] << ", " << current_grad_phi[ 6 ][ 2 ] << ", "
-                    << current_grad_phi[ 7 ][ 0 ] << ", " << current_grad_phi[ 7 ][ 1 ] << ", " << current_grad_phi[ 7 ][ 2 ] << ", "
-                    << current_grad_phi[ 8 ][ 0 ] << ", " << current_grad_phi[ 8 ][ 1 ] << ", " << current_grad_phi[ 8 ][ 2 ] << "\n";
-
-        //Output the PK2 stress
-        output_file << PK2_result[ 0 ] << ", " << PK2_result[ 1 ] << ", " << PK2_result[ 2 ] << ", "
-                    << PK2_result[ 3 ] << ", " << PK2_result[ 4 ] << ", " << PK2_result[ 5 ] << ", "
-                    << PK2_result[ 6 ] << ", " << PK2_result[ 7 ] << ", " << PK2_result[ 8 ] << "\n";
-
-        //Output the SIGMA stress
-        output_file << SIGMA_result[ 0 ] << ", " << SIGMA_result[ 1 ] << ", " << SIGMA_result[ 2 ] << ", "
-                    << SIGMA_result[ 3 ] << ", " << SIGMA_result[ 4 ] << ", " << SIGMA_result[ 5 ] << ", "
-                    << SIGMA_result[ 6 ] << ", " << SIGMA_result[ 7 ] << ", " << SIGMA_result[ 8 ] << "\n";
-
-        //Output the M stress
-        output_file << M_result[  0 ] << ", " << M_result[  1 ] << ", " << M_result[  2 ] << ", "
-                    << M_result[  3 ] << ", " << M_result[  4 ] << ", " << M_result[  5 ] << ", "
-                    << M_result[  6 ] << ", " << M_result[  7 ] << ", " << M_result[  8 ] << ", "
-                    << M_result[  9 ] << ", " << M_result[ 10 ] << ", " << M_result[ 11 ] << ", "
-                    << M_result[ 12 ] << ", " << M_result[ 13 ] << ", " << M_result[ 14 ] << ", "
-                    << M_result[ 15 ] << ", " << M_result[ 16 ] << ", " << M_result[ 17 ] << ", "
-                    << M_result[ 18 ] << ", " << M_result[ 19 ] << ", " << M_result[ 20 ] << ", "
-                    << M_result[ 21 ] << ", " << M_result[ 22 ] << ", " << M_result[ 23 ] << ", "
-                    << M_result[ 24 ] << ", " << M_result[ 25 ] << ", " << M_result[ 26 ] << "\n";
-
-        //Determine if there were non-linear iterations
-        auto inc = DEBUG.find( "converged_values" );
-        if ( inc != DEBUG.end() ){
-            PK2_intermediate   = DEBUG[ "converged_values" ][ "converged_values" ][ "intermediatePK2Stress" ];
-            SIGMA_intermediate = DEBUG[ "converged_values" ][ "converged_values" ][ "intermediateReferenceMicroStress" ];
-            M_intermediate     = DEBUG[ "converged_values" ][ "converged_values" ][ "intermediateReferenceHigherOrderStress" ];
-        }
-        else{
-            PK2_intermediate   = DEBUG[ "pre_iteration_values" ][ "pre_iteration_values" ][ "intermediatePK2Stress" ];
-            SIGMA_intermediate = DEBUG[ "pre_iteration_values" ][ "pre_iteration_values" ][ "intermediateReferenceMicroStress" ];
-            M_intermediate     = DEBUG[ "pre_iteration_values" ][ "pre_iteration_values" ][ "intermediateReferenceHigherOrderStress" ];
-        }
-
-        //Output the intermediate PK2 stress
-        output_file << PK2_intermediate[ 0 ] << ", " << PK2_intermediate[ 1 ] << ", " << PK2_intermediate[ 2 ] << ", "
-                    << PK2_intermediate[ 3 ] << ", " << PK2_intermediate[ 4 ] << ", " << PK2_intermediate[ 5 ] << ", "
-                    << PK2_intermediate[ 6 ] << ", " << PK2_intermediate[ 7 ] << ", " << PK2_intermediate[ 8 ] << "\n";
-
-        //Output the intermediate SIGMA stress
-        output_file << SIGMA_intermediate[ 0 ] << ", " << SIGMA_intermediate[ 1 ] << ", " << SIGMA_intermediate[ 2 ] << ", "
-                    << SIGMA_intermediate[ 3 ] << ", " << SIGMA_intermediate[ 4 ] << ", " << SIGMA_intermediate[ 5 ] << ", "
-                    << SIGMA_intermediate[ 6 ] << ", " << SIGMA_intermediate[ 7 ] << ", " << SIGMA_intermediate[ 8 ] << "\n";
-
-        //Output the intermediate M stress
-        output_file << M_intermediate[  0 ] << ", " << M_intermediate[  1 ] << ", " << M_intermediate[  2 ] << ", "
-                    << M_intermediate[  3 ] << ", " << M_intermediate[  4 ] << ", " << M_intermediate[  5 ] << ", "
-                    << M_intermediate[  6 ] << ", " << M_intermediate[  7 ] << ", " << M_intermediate[  8 ] << ", "
-                    << M_intermediate[  9 ] << ", " << M_intermediate[ 10 ] << ", " << M_intermediate[ 11 ] << ", "
-                    << M_intermediate[ 12 ] << ", " << M_intermediate[ 13 ] << ", " << M_intermediate[ 14 ] << ", "
-                    << M_intermediate[ 15 ] << ", " << M_intermediate[ 16 ] << ", " << M_intermediate[ 17 ] << ", "
-                    << M_intermediate[ 18 ] << ", " << M_intermediate[ 19 ] << ", " << M_intermediate[ 20 ] << ", "
-                    << M_intermediate[ 21 ] << ", " << M_intermediate[ 22 ] << ", " << M_intermediate[ 23 ] << ", "
-                    << M_intermediate[ 24 ] << ", " << M_intermediate[ 25 ] << ", " << M_intermediate[ 26 ] << "\n";
-        
-        //Output the state variables
-        for ( unsigned int i = 0; i < SDVS.size()-1; i++ ){
-            output_file << SDVS[ i ] << ", ";
-        }
-        output_file << SDVS[ SDVS.size() - 1 ] << "\n";
-
-#endif
+        std::cout << "SDVS:\n"; tardigradeVectorTools::print( SDVS );
 
         BOOST_CHECK( errorCode <= 0 );
-#ifdef DEBUG_MODE
-        if ( errorCode > 0 ){
-            output_file.close();
-        }
-#endif
 
         t += dt;
 
@@ -973,9 +679,6 @@ BOOST_AUTO_TEST_CASE( testEvaluate_model_history ){
         phi_prev      = phi_curr;
         grad_phi_prev = grad_phi_curr;
 
-#ifdef DEBUG_MODE    
-        if ( t > 0.25 ){ output_file.close(); return 1; }
-#endif
     }
 
     BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( SDVSAnswer, SDVS ) );
@@ -986,7 +689,4 @@ BOOST_AUTO_TEST_CASE( testEvaluate_model_history ){
 
     BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( MAnswer, M_result ) );
     
-#ifdef DEBUG_MODE
-    output_file.close();
-#endif
 }

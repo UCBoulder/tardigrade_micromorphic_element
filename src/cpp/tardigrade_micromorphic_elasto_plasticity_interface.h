@@ -32,7 +32,7 @@ namespace tardigradeMicromorphicElastoPlasticity{
 #endif
                               )
             {
-                return tardigradeMicromorphicElastoPlasticity::evaluate_model(
+                return tardigradeMicromorphicElastoPlasticity::evaluate_hydra_model(
                                          time, fparams,
                                          current_grad_u, current_phi, current_grad_phi,
                                          previous_grad_u, previous_phi, previous_grad_phi,
@@ -76,7 +76,7 @@ namespace tardigradeMicromorphicElastoPlasticity{
                               )
             {
 
-                return tardigradeMicromorphicElastoPlasticity::evaluate_model(
+                return tardigradeMicromorphicElastoPlasticity::evaluate_hydra_model(
                                          time, fparams,
                                          current_grad_u, current_phi, current_grad_phi,
                                          previous_grad_u, previous_phi, previous_grad_phi,

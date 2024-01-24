@@ -12,6 +12,7 @@ Changelog
 Internal Changes
 ================
 - Enabled github actions (:pull:`1`). By `Nathan Miller`_.
+- Changed the micromorphic models to use the hydra framework (:pull:`2`). By `Nathan Miller`_.
 
 ******************
 1.4.2 (2023-09-29)
