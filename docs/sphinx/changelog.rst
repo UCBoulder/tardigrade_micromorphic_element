@@ -6,13 +6,26 @@ Changelog
 #########
 
 ******************
-1.4.3 (unreleased)
+1.4.4 (unreleased)
 ******************
+
+******************
+1.4.3 (2024-01-25)
+******************
+
+Release
+=======
+- Released version (:pull:`4`). By `Nathan Miller`_.
 
 Internal Changes
 ================
 - Enabled github actions (:pull:`1`). By `Nathan Miller`_.
 - Changed the micromorphic models to use the hydra framework (:pull:`2`). By `Nathan Miller`_.
+- Updated to work with tardigrade_hydra 0.4.x (:pull:`3`). By `Nathan Miller`_.
+
+Bug Fixes
+=========
+- Fixed bug where the plastic multipliers could go negative (:pull:`3`). By `Nathan Miller`_.
 
 ******************
 1.4.2 (2023-09-29)
