@@ -9,6 +9,10 @@ Changelog
 1.4.4 (unreleased)
 ******************
 
+Internal Changes
+================
+- Updated the tests to reflect the new totally implicit plastic integration (:pull:`6`). By `Nathan Miller`_.
+
 ******************
 1.4.3 (2024-01-25)
 ******************
