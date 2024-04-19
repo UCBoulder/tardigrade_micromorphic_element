@@ -915,24 +915,26 @@ namespace balance_equations{
         else if ( ( j >= 3 ) && ( j < 12 ) ){
 
             for ( unsigned int I = 0; I < dim; I++ ){
+                variableType F_iI = F[ dim * ( i /3 ) + I ];
                 for ( unsigned int J = 0; J < dim; J++ ){
-                    DcintDU_ij += N * F[ dim * ( i / 3 ) + I ] * ( DPK2Dphi[ dim * J + I ][ j - 3 ]
-                                                                 - DSIGMADphi[ dim * J + I ][ j - 3 ]
-                                                                 ) * eta * F[ dim * ( i % 3 ) + J ];
+                    variableType F_iJ = F[ dim * ( i % 3 ) + J ];
+                    DcintDU_ij += N * F_iI * ( DPK2Dphi[ dim * J + I ][ j - 3 ]
+                                             - DSIGMADphi[ dim * J + I ][ j - 3 ]
+                                             ) * eta * F_iJ;
                     for ( unsigned int K = 0; K < dim; K++ ){
-                        DcintDU_ij += N * F[ dim * ( i / 3 ) + I ] * ( DPK2Dgrad_phi[ dim * J + I ][ dim * ( j - 3 ) + K ]
-                                                                     - DSIGMADgrad_phi[ dim * J + I ][ dim * ( j - 3 ) + K ]
-                                                                     ) * detadX[ K ] * F[ dim * ( i % 3 ) + J ];
+                        DcintDU_ij += N * F_iI * ( DPK2Dgrad_phi[ dim * J + I ][ dim * ( j - 3 ) + K ]
+                                                 - DSIGMADgrad_phi[ dim * J + I ][ dim * ( j - 3 ) + K ]
+                                                 ) * detadX[ K ] * F_iJ;
 
-                        DcintDU_ij -= dNdX[ K ] * F[ dim * ( i / 3 ) + I ] * chi[ dim * ( i % 3 ) + J ]
+                        DcintDU_ij -= dNdX[ K ] * F_iI * chi[ dim * ( i % 3 ) + J ]
                                     * DMDphi[ dim * dim * K + dim * I + J ][ j - 3 ] * eta;
 
                         for ( unsigned int L = 0; L < dim; L++ ){
-                            DcintDU_ij -= dNdX[ K ] * F[ dim * ( i / 3 ) + I ] * chi[ dim * ( i % 3 ) + J ] * DMDgrad_phi[ dim * dim * K + dim * I + J ][ dim * ( j - 3 ) + L ] * detadX[ L ];
+                            DcintDU_ij -= dNdX[ K ] * F_iI * chi[ dim * ( i % 3 ) + J ] * DMDgrad_phi[ dim * dim * K + dim * I + J ][ dim * ( j - 3 ) + L ] * detadX[ L ];
                         }
 
                         if ( ( dim * ( i % 3 ) + J ) == ( j - 3 ) ){
-                            DcintDU_ij -= dNdX[ K ] * F[ dim * ( i / 3 ) + I ] * eta * M[ dim * dim * K + dim * I + J ];
+                            DcintDU_ij -= dNdX[ K ] * F_iI * eta * M[ dim * dim * K + dim * I + J ];
                         }
                     }
                 }
