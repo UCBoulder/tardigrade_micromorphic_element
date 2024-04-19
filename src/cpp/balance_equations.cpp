@@ -18,6 +18,7 @@
   |        eigen.tuxfamily.org.                               |
   =============================================================*/
 
+#define SKIP_ERROR_HANDLING
 #include <balance_equations.h>
 
 namespace balance_equations{
@@ -882,14 +883,17 @@ namespace balance_equations{
         if ( j < 3 ){
 
             for ( unsigned int I = 0; I < dim; I++ ){
+                variableType F_iI = F[ dim * ( i / 3 ) + I ];
                 for ( unsigned int J = 0; J < dim; J++ ){
+                    variableType F_iJ = F[ dim * ( i % 3 ) + J ];
+                    variableType PK2_M_SIGMA = PK2[ dim * J + I ] - SIGMA[ dim * J + I ];
                     for ( unsigned int K = 0; K < dim; K++ ){
-                        DcintDU_ij += N * F[ dim * ( i / 3 ) + I ] * ( DPK2Dgrad_u[ dim * J + I ][ dim * j + K ]
-                                                                     - DSIGMADgrad_u[ dim * J + I ][ dim * j + K ]
-                                                                     ) * detadX[ K ] * F[ dim * ( i % 3 ) + J ];
+                        DcintDU_ij += N * F_iI * ( DPK2Dgrad_u[ dim * J + I ][ dim * j + K ]
+                                                 - DSIGMADgrad_u[ dim * J + I ][ dim * j + K ]
+                                                 ) * detadX[ K ] * F_iJ;
 
                         for ( unsigned int L = 0; L < dim; L++ ){
-                            DcintDU_ij -= dNdX[ K ] * F[ dim * ( i / 3 ) + I ] * chi[ dim * ( i % 3 ) + J ]
+                            DcintDU_ij -= dNdX[ K ] * F_iI * chi[ dim * ( i % 3 ) + J ]
                                         * DMDgrad_u[ dim * dim * K + dim * I + J ][ dim * j + L ] * detadX[ L ];
                         }
                         
@@ -899,11 +903,11 @@ namespace balance_equations{
                     }
 
                     if ( ( i / 3 ) == j ){
-                        DcintDU_ij += N * detadX[ I ] * ( PK2[ dim * J + I ] - SIGMA[ dim * J + I ] ) * F[ dim * ( i % 3 ) + J ];
+                        DcintDU_ij += N * detadX[ I ] * PK2_M_SIGMA * F_iJ;
                     }
 
                     if ( ( i % 3 ) == j ){
-                        DcintDU_ij += N * F[ dim * ( i / 3 ) + I ] * ( PK2[ dim * J + I ] - SIGMA[ dim * J + I ] ) * detadX[ J ];
+                        DcintDU_ij += N * F[ dim * ( i / 3 ) + I ] * PK2_M_SIGMA * detadX[ J ];
                     }
                 }
             }
