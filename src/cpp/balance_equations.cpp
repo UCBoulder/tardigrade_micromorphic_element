@@ -756,7 +756,7 @@ namespace balance_equations{
         //Assume 12 DOF
         unsigned int NDOF = 12;
 
-#ifndef SKIP_ERROR_HANDING
+#ifndef SKIP_ERROR_HANDLING
 
         if ( F.size() != dim * dim ){
             return 1;
@@ -967,7 +967,7 @@ namespace balance_equations{
         const unsigned int dim = 3;
 
         //Error handling
-#ifndef SKIP_ERROR_HANDING
+#ifndef SKIP_ERROR_HANDLING
         if ( D3ChiDt2DChi.size( ) != dim * dim ){
 
             //Return the error code
@@ -1059,7 +1059,7 @@ namespace balance_equations{
         const unsigned int M = j % dim;
 
         //Error handling
-#ifndef SKIP_ERROR_HANDING
+#ifndef SKIP_ERROR_HANDLING
         if ( D3ChiDt2DChi_j.size( ) != dim * dim ){
 
             return 2;
