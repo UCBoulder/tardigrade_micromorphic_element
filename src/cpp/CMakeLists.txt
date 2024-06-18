@@ -1,7 +1,7 @@
 # Project
 
 # Build the micromorphic balance equations
-add_library (${BALANCE_EQUATION_LIBRARY} SHARED "${BALANCE_EQUATION_LIBRARY_FILENAME}.cpp" "${BALANCE_EQUATION_LIBRARY_FILENAME}.h")
+add_library(${BALANCE_EQUATION_LIBRARY} SHARED "${BALANCE_EQUATION_LIBRARY_FILENAME}.cpp" "${BALANCE_EQUATION_LIBRARY_FILENAME}.h")
 set_target_properties(${BALANCE_EQUATION_LIBRARY} PROPERTIES CXX_STANDARD 11
                                                  PUBLIC_HEADER ${BALANCE_EQUATION_LIBRARY_FILENAME}.h)
 target_link_libraries(${BALANCE_EQUATION_LIBRARY} tardigrade_error_tools)
@@ -31,7 +31,7 @@ foreach(user_subroutine ${USER_SUBROUTINES})
 endforeach(user_subroutine)
 
 # Project
-add_library (${MATERIAL_MODEL_LIBRARY} SHARED "${MATERIAL_MODEL_LIBRARY_FILENAME}.cpp" "${MATERIAL_MODEL_LIBRARY_FILENAME}.h")
+add_library(${MATERIAL_MODEL_LIBRARY} SHARED "${MATERIAL_MODEL_LIBRARY_FILENAME}.cpp" "${MATERIAL_MODEL_LIBRARY_FILENAME}.h")
 set_target_properties(${MATERIAL_MODEL_LIBRARY} PROPERTIES CXX_STANDARD 11
                                                 PUBLIC_HEADER "${MATERIAL_MODEL_LIBRARY_FILENAME}.h"
                                                 SUFFIX ".so")
