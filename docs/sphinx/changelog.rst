@@ -12,6 +12,7 @@ Changelog
 Internal Changes
 ================
 - Updated the tests to reflect the new totally implicit plastic integration (:pull:`6`). By `Nathan Miller`_.
+- Allow the version to be set when using FetchContent (:pull:`9`). By `Nathan Miller`_.
 
 Bug Fixes
 =========
