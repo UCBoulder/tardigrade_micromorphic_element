@@ -20,14 +20,11 @@
 #define BOOST_TEST_MODULE test_tardigrade_micromorphic_linear_elasticity
 #include <boost/test/included/unit_test.hpp>
 
-typedef tardigradeErrorTools::Node errorNode;
-typedef errorNode* errorOut;
-
 typedef balance_equations::variableType variableType;
 typedef balance_equations::variableVector variableVector;
 typedef balance_equations::variableMatrix variableMatrix;
 
-errorOut interpolate_values( const variableVector &etas, const variableMatrix &values, variableVector &v ){
+void interpolate_values( const variableVector &etas, const variableMatrix &values, variableVector &v ){
     /*!
      * Interpolate values to a point
      *
@@ -37,10 +34,10 @@ errorOut interpolate_values( const variableVector &etas, const variableMatrix &v
      */
 
     v = tardigradeVectorTools::dot( values, etas );
-    return NULL;
+    return;
 }
 
-errorOut interpolate_gradients( const variableMatrix &detadX, const variableMatrix &values, variableMatrix &dvdX ){
+void interpolate_gradients( const variableMatrix &detadX, const variableMatrix &values, variableMatrix &dvdX ){
     /*!
      * Compute the gradients at a point
      *
@@ -50,7 +47,7 @@ errorOut interpolate_gradients( const variableMatrix &detadX, const variableMatr
      */
 
     dvdX = tardigradeVectorTools::dot( values, detadX );
-    return NULL;
+    return;
 }
 
 BOOST_AUTO_TEST_CASE( testInterpolate_values ){
@@ -80,9 +77,9 @@ BOOST_AUTO_TEST_CASE( testInterpolate_values ){
                               -0.31168643,  0.60400088,  0.01128995,  0.02909782, -0.01283899,  0.01441026 };
 
     variableVector result;
-    errorOut error = interpolate_values( etas, values, result );
+    interpolate_values( etas, values, result );
 
-    BOOST_CHECK( !error );
+    
 
     BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( result, answer ) );
 }
@@ -136,14 +133,14 @@ BOOST_AUTO_TEST_CASE( testInterpolate_gradients ){
         };
 
     variableMatrix result;
-    errorOut error = interpolate_gradients( detadX, values, result );
+    interpolate_gradients( detadX, values, result );
 
-    BOOST_CHECK( !error );
+    
 
     BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( result, answer ) );
 }
 
-errorOut evaluate_model( const variableVector &etas, const variableMatrix &detadX, const variableMatrix &values,
+void evaluate_model( const variableVector &etas, const variableMatrix &detadX, const variableMatrix &values,
                          variableVector &PK2, variableVector &SIGMA, variableVector &M,
                          variableMatrix &DPK2Dgrad_u, variableMatrix &DPK2Dphi, variableMatrix &DPK2Dgrad_phi,
                          variableMatrix &DSIGMADgrad_u, variableMatrix &DSIGMADphi, variableMatrix &DSIGMADgrad_phi,
@@ -180,13 +177,13 @@ errorOut evaluate_model( const variableVector &etas, const variableMatrix &detad
     variableVector utilde;
     variableMatrix dUtildedX;
 
-    errorOut error = interpolate_values( etas, values, utilde );
+    interpolate_values( etas, values, utilde );
 
-    BOOST_CHECK( !error );
+    
 
-    error = interpolate_gradients( detadX, values, dUtildedX );
+    interpolate_gradients( detadX, values, dUtildedX );
 
-    BOOST_CHECK( !error );
+    
 
     variableVector grad_u = tardigradeVectorTools::appendVectors( { dUtildedX[ 0 ], dUtildedX[ 1 ], dUtildedX[ 2 ] } );
     variableVector phi( utilde.begin() + 3, utilde.begin() + 12 );
@@ -824,11 +821,11 @@ errorOut evaluate_model( const variableVector &etas, const variableMatrix &detad
     M     = tardigradeVectorTools::dot( DMDgrad_u, grad_u )     + tardigradeVectorTools::dot( DMDphi, phi )
           + tardigradeVectorTools::dot( DMDgrad_phi, grad_phi );
 
-    return NULL;
+    return;
 
 }
 
-errorOut evaluate_model( const variableVector &etas, const variableMatrix &detadX, const variableMatrix &values,
+void evaluate_model( const variableVector &etas, const variableMatrix &detadX, const variableMatrix &values,
                          variableVector &PK2, variableVector &SIGMA, variableVector &M ){
     /*!
      * Evaluate a pseudo constitutive model at a point
@@ -903,9 +900,9 @@ BOOST_AUTO_TEST_CASE( _test_evaluate_model ){
 
     variableVector PK2, SIGMA, M;
     
-    errorOut error = evaluate_model( etas, detadX, values, PK2, SIGMA, M );
+    evaluate_model( etas, detadX, values, PK2, SIGMA, M );
 
-    BOOST_CHECK( !error );
+    
 
     BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( PK2, PK2Answer ) );
 
@@ -1181,9 +1178,9 @@ BOOST_AUTO_TEST_CASE( testCompute_internal_force_jacobian ){
         variableVector F_P = tardigradeVectorTools::appendVectors( { dUtildedX_P[ 0 ], dUtildedX_P[ 1 ], dUtildedX_P[ 2 ] } );
         F_P += eye;
 
-        errorOut error = evaluate_model( etas, detadX, values + delta, PK2_P, SIGMA_P, M_P );
+        evaluate_model( etas, detadX, values + delta, PK2_P, SIGMA_P, M_P );
 
-        BOOST_CHECK( !error );
+        
 
         balance_equations::compute_internal_force( dNdX, F_P, PK2_P, fint_P );
 
@@ -1193,9 +1190,9 @@ BOOST_AUTO_TEST_CASE( testCompute_internal_force_jacobian ){
         variableVector F_M = tardigradeVectorTools::appendVectors( { dUtildedX_M[ 0 ], dUtildedX_M[ 1 ], dUtildedX_M[ 2 ] } );
         F_M += eye;
 
-        error = evaluate_model( etas, detadX, values - delta, PK2_M, SIGMA_M, M_M );
+        evaluate_model( etas, detadX, values - delta, PK2_M, SIGMA_M, M_M );
 
-        BOOST_CHECK( !error );
+        
 
         balance_equations::compute_internal_force( dNdX, F_M, PK2_M, fint_M );
         
@@ -1213,11 +1210,11 @@ BOOST_AUTO_TEST_CASE( testCompute_internal_force_jacobian ){
                    DSIGMADgrad_u, DSIGMADphi, DSIGMADgrad_phi,
                    DMDgrad_u, DMDphi, DMDgrad_phi;
 
-    errorOut error = evaluate_model( etas, detadX, values, PK2, SIGMA, M, DPK2Dgrad_u, DPK2Dphi, DPK2Dgrad_phi,
+    evaluate_model( etas, detadX, values, PK2, SIGMA, M, DPK2Dgrad_u, DPK2Dphi, DPK2Dgrad_phi,
                                      DSIGMADgrad_u, DSIGMADphi, DSIGMADgrad_phi,
                                      DMDgrad_u, DMDphi, DMDgrad_phi );
 
-    BOOST_CHECK( !error );
+    
 
     //Evaluate the analytic gradients
     variableMatrix DfintDU_analytic;
@@ -1314,9 +1311,9 @@ BOOST_AUTO_TEST_CASE( testCompute_internal_couple_jacobian ){
         variableVector chi_P( utilde_P.begin() + 3, utilde_P.begin() + 12 );
         chi_P += eye;
 
-        errorOut error = evaluate_model( etas, detadX, values + delta, PK2_P, SIGMA_P, M_P );
+        evaluate_model( etas, detadX, values + delta, PK2_P, SIGMA_P, M_P );
 
-        BOOST_CHECK( !error );
+        
 
         errorCode = balance_equations::compute_internal_couple( N, dNdX, F_P, chi_P, PK2_P, SIGMA_P, M_P, cint_P );
 
@@ -1332,9 +1329,9 @@ BOOST_AUTO_TEST_CASE( testCompute_internal_couple_jacobian ){
         variableVector chi_M( utilde_M.begin() + 3, utilde_M.begin() + 12 );
         chi_M += eye;
 
-        error = evaluate_model( etas, detadX, values - delta, PK2_M, SIGMA_M, M_M );
+        evaluate_model( etas, detadX, values - delta, PK2_M, SIGMA_M, M_M );
 
-        BOOST_CHECK( !error );
+        
 
         errorCode = balance_equations::compute_internal_couple( N, dNdX, F_M, chi_M, PK2_M, SIGMA_M, M_M, cint_M );
 
@@ -1359,11 +1356,11 @@ BOOST_AUTO_TEST_CASE( testCompute_internal_couple_jacobian ){
                    DSIGMADgrad_u, DSIGMADphi, DSIGMADgrad_phi,
                    DMDgrad_u, DMDphi, DMDgrad_phi;
 
-    errorOut error = evaluate_model( etas, detadX, values, PK2, SIGMA, M, DPK2Dgrad_u, DPK2Dphi, DPK2Dgrad_phi,
+    evaluate_model( etas, detadX, values, PK2, SIGMA, M, DPK2Dgrad_u, DPK2Dphi, DPK2Dgrad_phi,
                                      DSIGMADgrad_u, DSIGMADphi, DSIGMADgrad_phi,
                                      DMDgrad_u, DMDphi, DMDgrad_phi );
 
-    BOOST_CHECK( !error );
+    
 
     //Evaluate the analytic gradients
     variableMatrix DcintDU_analytic;
