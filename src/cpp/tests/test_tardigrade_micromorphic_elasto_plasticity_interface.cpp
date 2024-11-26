@@ -22,9 +22,6 @@ typedef tardigradeMicromorphicTools::variableType variableType;
 typedef tardigradeMicromorphicTools::variableVector variableVector;
 typedef tardigradeMicromorphicTools::variableMatrix variableMatrix;
 
-typedef tardigradeMicromorphicTools::errorNode errorNode;
-typedef tardigradeMicromorphicTools::errorOut errorOut;
-
 BOOST_AUTO_TEST_CASE( testMaterialLibraryInterface ){
     /*!
      * Test the interface to the linear elastic model
@@ -157,22 +154,22 @@ BOOST_AUTO_TEST_CASE( testMaterialLibraryInterface ){
     std::string output_message;
 
 // Old approach
-//    tardigradeSolverTools::floatVector PK2_answer = { 172.484,   15.3785,   -0.917177,
+//    tardigradeConstitutiveTools::floatVector PK2_answer = { 172.484,   15.3785,   -0.917177,
 //                                             13.4848, 142.823,    -0.0214307,
 //                                             -1.7635,   1.77719, 141.069 };
 //
-//    tardigradeSolverTools::floatVector SIGMA_answer = { 176.916,   15.8646,   -2.83731,
+//    tardigradeConstitutiveTools::floatVector SIGMA_answer = { 176.916,   15.8646,   -2.83731,
 //                                               15.8646, 144.538,     1.85836,
 //                                               -2.83731,  1.85836, 142.013 };
 //
-//    tardigradeSolverTools::floatVector M_answer = { 0.598283, -0.512218,  0.620664,    3.22636,   1.16682,
+//    tardigradeConstitutiveTools::floatVector M_answer = { 0.598283, -0.512218,  0.620664,    3.22636,   1.16682,
 //                                          1.20593,   0.562825, -2.52317,     1.62616,  -2.61391,
 //                                         -0.60994,  -1.02147,   0.668187,    0.49348,  -0.23916,
 //                                         -2.77419,   0.760483,  1.71784,    -0.499389,  2.62828,
 //                                         -0.761044,  1.23369,  -0.00778206, -2.25643,  -0.729551,
 //                                          0.743204,  0.910521 };
 //
-//    tardigradeSolverTools::floatVector SDVS_answer = { -1.79592e-24,  0.0243222,    0.0822384,    0.0430345,   0.0435752,
+//    tardigradeConstitutiveTools::floatVector SDVS_answer = { -1.79592e-24,  0.0243222,    0.0822384,    0.0430345,   0.0435752,
 //                                             -8.96006e-25,  0.00852191,   0.0465339,    0.0243507,   0.0246566,
 //                                              0.00742998,   0.00500421,  -0.000296486,  0.00498757, -0.00260492,
 //                                              0.000284355, -0.000367318,  0.000222511, -0.0015603,   0.00863313,
@@ -185,22 +182,22 @@ BOOST_AUTO_TEST_CASE( testMaterialLibraryInterface ){
 //                                              0.00935849,   0.0214931,    0.0169609,    0.0177352,   0.0203838 };
 
 // Hydra approach
-    tardigradeSolverTools::floatVector PK2_answer = { 1.72374955e+02,  1.53586446e+01, -9.18594711e-01,
+    tardigradeConstitutiveTools::floatVector PK2_answer = { 1.72374955e+02,  1.53586446e+01, -9.18594711e-01,
                                                       1.34613772e+01,  1.42758448e+02, -2.14353350e-02,
                                                      -1.76155689e+00,  1.77580288e+00,  1.41003910e+02 };
 
-    tardigradeSolverTools::floatVector SIGMA_answer = { 176.85221932,  15.84248153,  -2.83823499,
+    tardigradeConstitutiveTools::floatVector SIGMA_answer = { 176.85221932,  15.84248153,  -2.83823499,
                                                          15.84248153, 144.5183467 ,   1.85778345,
                                                          -2.83823499,   1.85778345, 141.99307014 };
 
-    tardigradeSolverTools::floatVector M_answer = { 0.60016978, -0.51045338,  0.61980289,  3.23507063,  1.16925208,
+    tardigradeConstitutiveTools::floatVector M_answer = { 0.60016978, -0.51045338,  0.61980289,  3.23507063,  1.16925208,
                                                     1.20665651,  0.56034359, -2.52042105,  1.62648849, -2.61882314,
                                                    -0.61143851, -1.02227749,  0.67046998,  0.49701267, -0.23999964,
                                                    -2.77670511,  0.75636495,  1.71897722, -0.49808019,  2.62569695,
                                                    -0.76002078,  1.23462488, -0.00650376, -2.25591243, -0.73016414,
                                                     0.74380723,  0.90861263 };
 
-    tardigradeSolverTools::floatVector SDVS_answer = { 7.52790780e-03,  5.06936872e-03, -3.00562092e-04,  5.05251313e-03,
+    tardigradeConstitutiveTools::floatVector SDVS_answer = { 7.52790780e-03,  5.06936872e-03, -3.00562092e-04,  5.05251313e-03,
                                                       -2.63763651e-03,  2.87928507e-04, -3.72441969e-04,  2.25230220e-04,
                                                       -1.58168041e-03,  7.52714199e-03,  4.60154810e-03, -3.01710599e-04,
                                                        5.56787320e-03, -2.63687070e-03,  2.58160226e-04, -3.65069825e-04,
