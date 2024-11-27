@@ -6,8 +6,26 @@ Changelog
 #########
 
 ******************
-1.4.4 (unreleased)
+1.4.5 (unreleased)
 ******************
+
+******************
+1.4.4 (2024-11-26)
+******************
+
+Release
+=======
+- Released version (:pull:`12`). By `Nathan Miller`_.
+
+Internal Changes
+================
+- Updated the tests to reflect the new totally implicit plastic integration (:pull:`6`). By `Nathan Miller`_.
+- Allow the version to be set when using FetchContent (:pull:`9`). By `Nathan Miller`_.
+- Removed all calls to errorOut (:pull:`11`). By `Nathan Miller`_.
+
+Bug Fixes
+=========
+- Removed leading whitespace after add_library in the CMakeLists file (:pull:`7`). By `Nathan Miller`_.
 
 ******************
 1.4.3 (2024-01-25)

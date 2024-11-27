@@ -21,9 +21,6 @@ typedef tardigradeMicromorphicTools::variableType variableType;
 typedef tardigradeMicromorphicTools::variableVector variableVector;
 typedef tardigradeMicromorphicTools::variableMatrix variableMatrix;
 
-typedef tardigradeMicromorphicTools::errorNode errorNode;
-typedef tardigradeMicromorphicTools::errorOut errorOut;
-
 BOOST_AUTO_TEST_CASE( testMaterialLibraryInterface ){
     /*!
      * Test the interface to the linear elastic model
@@ -133,7 +130,7 @@ BOOST_AUTO_TEST_CASE( testMaterialLibraryInterface ){
 
     std::vector< std::vector< std::vector< double > > > ADD_JACOBIANS;
 
-    errorCode = tardigradeMicromorphicLinearElasticity::evaluate_model( 
+    errorCode = tardigradeMicromorphicLinearElasticity::evaluate_hydra_model( 
                                 time, fparams,
                                 current_grad_u, current_phi, current_grad_phi,
                                 previous_grad_u, previous_phi, previous_grad_phi,
