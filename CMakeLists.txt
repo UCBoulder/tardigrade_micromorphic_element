@@ -10,6 +10,10 @@ set(DOXYGEN_SRC_PATH "docs/doxygen")
 set(SPHINX_SRC_PATH "docs/sphinx")
 
 set(TARDIGRADE_MICROMORPHIC_ELEMENT_BUILD_PYTHON_BINDINGS ON CACHE BOOL "Flag for whether to build the python bindings or not")
+
+# Add a flag for if a full build of all tardigrade repositories should be performed
+set(TARDIGRADE_FULL_BUILD OFF CACHE BOOL "Flag for whether a full build of Tardigrade should be performed (i.e., all repos pulled from git and built)")
+
 # Add the cmake folder to locate project CMake module(s)
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/${CMAKE_SRC_PATH}" ${CMAKE_MODULE_PATH})
 
@@ -97,7 +101,11 @@ set(upstream_packages "tardigrade_error_tools" "tardigrade_vector_tools" "tardig
 foreach(package ${upstream_packages})
     string(TOUPPER "${package}" package_upper)
     set(${package_upper}_BUILD_PYTHON_BINDINGS ${TARDIGRADE_MICROMORPHIC_ELEMENT_BUILD_PYTHON_BINDINGS} CACHE INTERNAL "Setting ${package}'s python binding flag to the global value")
-    find_package(${package} ${upstream_required} CONFIG)
+    if(TARDIGRADE_FULL_BUILD)
+        message("Not attempting to find ${package}")
+    else()
+        find_package(${package} ${upstream_required} CONFIG)
+    endif()
     if(${package}_FOUND)
         message(STATUS "Found ${package}: ${${package}_DIR}")
     else()

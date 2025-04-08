@@ -9,6 +9,14 @@ Changelog
 1.4.5 (unreleased)
 ******************
 
+New Features
+============
+- Allow users to specify that a full build of the tardigrade stack should be performed (:pull:`13`). By `Nathan Miller`_.
+
+Bug Fixes
+=========
+- Corrected issues with building the python interface (:pull:`13`). By `Nathan Miller`_.
+
 ******************
 1.4.4 (2024-11-26)
 ******************
