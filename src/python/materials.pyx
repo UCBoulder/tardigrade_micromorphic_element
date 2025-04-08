@@ -42,7 +42,7 @@ cdef map_matrix_to_array(vector[vector[double]] M):
 
 cdef map_3matrix_to_array(vector[vector[vector[double]]] M3):
 
-    return np.array([map_matrix_to_array(M) for M in M3])
+    return [map_matrix_to_array(M) for M in M3]
 
 
 def evaluate_model(object model_name,
@@ -138,7 +138,7 @@ def evaluate_model(object model_name,
     cdef np.ndarray DMDphi
     cdef np.ndarray DMDgrad_phi
     cdef np.ndarray ADD_TERMS
-    cdef np.ndarray ADD_JACOBIANS
+    cdef list ADD_JACOBIANS
     cdef object output_message
 
     # Map the grad u variables
