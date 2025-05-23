@@ -13,6 +13,10 @@ New Features
 ============
 - Allow users to specify that a full build of the tardigrade stack should be performed (:pull:`13`). By `Nathan Miller`_.
 
+Internal Changes
+================
+- Updated the tests to reflect changes to the micro gradient plasticity evolution algorithm (:pull:`14`). By `Nathan Miller`_.
+
 Bug Fixes
 =========
 - Corrected issues with building the python interface (:pull:`13`). By `Nathan Miller`_.
