@@ -1,7 +1,7 @@
 # Micromorphic material library
 #
 # Author: Nathan A. Miller ( LANL / CU Boulder )
-# Email:  nathanm@lanl.gov
+# Email:  Nathan.A.Miller@colorado.edu
 # Date:   April 30, 2020
 #
 # This is the makefile for the micromoprhic material model library. This library 

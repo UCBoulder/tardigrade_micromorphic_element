@@ -1,10 +1,20 @@
+#Environment definition
 boost>=1.59
 breathe>=4.30.0
 cmake>=3.18
 compilers
-doxygen>=1.9
+cython
+doxygen
 eigen>=3.3.7
+mamba
+pip
+pytest
+pytest-cov
+pytest-xdist
+python-build
 python
+pytest
+numpy
 setuptools_scm>=6.2
 sphinx>=3.0.4
 sphinx_rtd_theme>=0.4.3
