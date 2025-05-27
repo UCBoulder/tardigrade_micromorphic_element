@@ -1,5 +1,5 @@
 #===================================================================================================== PROJECT SETUP ===
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.24)
 project(tardigrade_micromorphic_element)
 
 # Set common project paths relative to project root directory
@@ -10,6 +10,10 @@ set(DOXYGEN_SRC_PATH "docs/doxygen")
 set(SPHINX_SRC_PATH "docs/sphinx")
 
 set(TARDIGRADE_MICROMORPHIC_ELEMENT_BUILD_PYTHON_BINDINGS ON CACHE BOOL "Flag for whether to build the python bindings or not")
+
+# Add a flag for if a full build of all tardigrade repositories should be performed
+set(TARDIGRADE_FULL_BUILD OFF CACHE BOOL "Flag for whether a full build of Tardigrade should be performed (i.e., all repos pulled from git and built)")
+
 # Add the cmake folder to locate project CMake module(s)
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/${CMAKE_SRC_PATH}" ${CMAKE_MODULE_PATH})
 
@@ -26,15 +30,12 @@ endif()
 
 # Get version number from Git
 if(${not_conda_test} STREQUAL "true")
-    # TODO: On osx-arm64 some c++ projects struggle to find $PREFIX/bin/python during conda-builds and others don't.
-    # Trace the source and remove the hint when CMake configures with the correct python version during conda-build.
-    # FIXME: troubleshoot sstbigbird/RHEL8 python interpretter mismatch
-    # https://re-git.lanl.gov/aea/material-models/tardigrade_micromorphic_tools/-/issues/9
     if (DEFINED ENV{PREFIX})
         set(Python_ROOT_DIR "$ENV{PREFIX}/bin")
     elseif (DEFINED ENV{CONDA_PREFIX})
         set(Python_ROOT_DIR "$ENV{CONDA_PREFIX}/bin")
     endif()
+    set(Python_FIND_STRATEGY LOCATION)
     find_package(Python COMPONENTS Interpreter REQUIRED)
     execute_process(COMMAND python -m setuptools_scm
 		            OUTPUT_VARIABLE ${PROJECT_NAME}_VERSION_STRING_FULL
@@ -80,9 +81,9 @@ set(MATERIAL_MODEL_LIBRARY "micromat")
 set(MATERIAL_MODEL_LIBRARY_FILENAME "micromorphic_material_library")
 set(USER_SUBROUTINES "tardigrade_micromorphic_linear_elasticity" "tardigrade_micromorphic_elasto_plasticity")
 set(USER_LIBRARIES ${BALANCE_EQUATION_LIBRARY} ${MATERIAL_MODEL_LIBRARY})
-foreach(library ${USER_LIBRARIES})
-    set(EXPORTED_LIBRARIES ${EXPORTED_LIBRARIES} "${library}")
-endforeach(library)
+#foreach(library ${USER_LIBRARIES})
+#    set(EXPORTED_LIBRARIES ${EXPORTED_LIBRARIES} "${library}")
+#endforeach(library)
 
 set(USER_INTERFACES "")
 foreach(user_subroutine ${USER_SUBROUTINES})
@@ -94,10 +95,18 @@ message("EXPORTED_LIBRARIES: ${EXPORTED_LIBRARIES}")
 # Find related, but external, projects in installed environment
 include(FetchContent)
 set(upstream_packages "tardigrade_error_tools" "tardigrade_vector_tools" "tardigrade_micromorphic_tools" ${USER_SUBROUTINES})
+if(${not_conda_test} STREQUAL "false")
+    # During conda-build testing, we must find the installed project files as if they were an external project
+    set(upstream_packages ${upstream_packages} ${USER_LIBRARIES})
+endif()
 foreach(package ${upstream_packages})
     string(TOUPPER "${package}" package_upper)
     set(${package_upper}_BUILD_PYTHON_BINDINGS ${TARDIGRADE_MICROMORPHIC_ELEMENT_BUILD_PYTHON_BINDINGS} CACHE INTERNAL "Setting ${package}'s python binding flag to the global value")
-    find_package(${package} ${upstream_required} CONFIG)
+    if(TARDIGRADE_FULL_BUILD)
+        message("Not attempting to find ${package}")
+    else()
+        find_package(${package} ${upstream_required} CONFIG)
+    endif()
     if(${package}_FOUND)
         message(STATUS "Found ${package}: ${${package}_DIR}")
     else()
@@ -138,7 +147,7 @@ endif()
 
 #==================================================================================== SETUP INSTALLATION CMAKE FILES ===
 if(${not_conda_test} STREQUAL "true")
-    foreach(package ${PROJECT_NAME})
+    foreach(package ${BALANCE_EQUATION_LIBRARY} ${MATERIAL_MODEL_LIBRARY})
         include(CMakePackageConfigHelpers)
         write_basic_package_version_file("${package}ConfigVersion.cmake"
                                          VERSION ${PROJECT_VERSION}
@@ -160,4 +169,10 @@ if(${not_conda_test} STREQUAL "true")
                       "${PROJECT_BINARY_DIR}/${package}ConfigVersion.cmake"
                 DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${package}/cmake)
     endforeach(package)
+    foreach(package ${USER_INTERFACES})
+        install(FILES ${CPP_SRC_PATH}/${package}.h ${CPP_SRC_PATH}/${package}.cpp
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    endforeach(package)
+    install(FILES ${CPP_SRC_PATH}/balance_equations.cpp ${CPP_SRC_PATH}/micromorphic_material_library.cpp
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 endif()

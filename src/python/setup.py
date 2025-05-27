@@ -16,7 +16,7 @@ source_files = [os.path.abspath('../cpp/material_python_interface.cpp'),
                 os.path.abspath('materials.pyx')]
 
 include_dirs = [numpy.get_include(), os.path.abspath('../cpp/')]
-library_dirs = [os.path.abspath('../cpp')]
+library_dirs = [os.path.abspath('../../build/src/cpp')]
 
 shared_libraries = ['micromat']
 
