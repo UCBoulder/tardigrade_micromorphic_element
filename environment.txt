@@ -1,7 +1,7 @@
 #Environment definition
 boost>=1.59
 breathe>=4.30.0
-cmake>=3.18
+cmake>=3.24
 compilers
 cython
 doxygen
