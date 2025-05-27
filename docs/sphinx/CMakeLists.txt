@@ -19,7 +19,6 @@ set(DOCUMENTATION_SOURCE
     ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
     ${CMAKE_CURRENT_SOURCE_DIR}/dependencies.txt
     ${CMAKE_CURRENT_SOURCE_DIR}/devops.rst
-    ${CMAKE_CURRENT_SOURCE_DIR}/gitlab_setup.rst
     ${CMAKE_CURRENT_SOURCE_DIR}/index.rst
     ${CMAKE_CURRENT_SOURCE_DIR}/md2rst.txt
     ${CMAKE_CURRENT_SOURCE_DIR}/project_brief.txt
