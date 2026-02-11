@@ -314,6 +314,8 @@ BOOST_AUTO_TEST_CASE( testMaterialLibraryInterface ){
                                           output_message
                                         );
 
+    BOOST_CHECK( errorCode == 0 );
+
     BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( PK2_result, PK2_answer, 1e-5, 1e-5 ) );
 
     BOOST_CHECK( tardigradeVectorTools::fuzzyEquals( SIGMA_result, SIGMA_answer, 1e-5, 1e-5 ) );

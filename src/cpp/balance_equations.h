@@ -115,7 +115,7 @@ namespace balance_equations{
                                           const variableMatrix &DPK2Dgrad_u, const variableMatrix &DPK2Dphi,
                                           const variableMatrix &DPK2Dgrad_phi,
                                           const variableMatrix &DSIGMADgrad_u, const variableMatrix &DSIGMADphi,
-                                          const variableMatrix &SIGMA2Dgrad_phi,
+                                          const variableMatrix &DSIGMADgrad_phi,
                                           const variableMatrix &DMDgrad_u, const variableMatrix &DMDphi,
                                           const variableMatrix &DMDgrad_phi,
                                           variableMatrix &DcintDU );

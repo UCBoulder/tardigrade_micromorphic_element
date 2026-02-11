@@ -45,6 +45,10 @@ elseif(cmake_build_type_lower STREQUAL "conda-test")
     set(not_conda_test "false")
 endif()
 
+if(CMAKE_EXPORT_COMPILE_COMMANDS)
+    set(CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
+endif()
+
 # Get version number from Git
 if(${not_conda_test} STREQUAL "true")
     if(DEFINED ENV{PREFIX})
