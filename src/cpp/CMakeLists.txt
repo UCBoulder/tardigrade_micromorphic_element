@@ -41,9 +41,7 @@ foreach(user_subroutine ${USER_SUBROUTINES})
         )
     endif()
     get_target_property(target_sources "${user_subroutine}_interface" SOURCES)
-    message("interface files:")
     foreach(source ${target_sources})
-        message(${source})
         set_property(GLOBAL APPEND PROPERTY CLANG_FORMAT_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${source}")
     endforeach(source)
 endforeach(user_subroutine)
@@ -61,12 +59,9 @@ set_target_properties(
 )
 target_compile_options(${MATERIAL_MODEL_LIBRARY} PUBLIC)
 target_link_libraries(${MATERIAL_MODEL_LIBRARY} PUBLIC tardigrade_error_tools ${USER_INTERFACES})
-foreach(user_interface ${USER_INTERFACES})
-    target_link_options(
-        ${MATERIAL_MODEL_LIBRARY}
-        PUBLIC "SHELL:-Wl,--whole-archive $<TARGET_FILE:${user_interface}> -Wl,--no-whole-archive"
-    )
-endforeach(user_interface)
+#foreach(user_interface ${USER_INTERFACES})
+#    target_link_libraries(${MATERIAL_MODEL_LIBRARY} PUBLIC "$<LINK_LIBRARY:WHOLE_ARCHIVE,${user_interface}>")
+#endforeach(user_interface)
 
 # Local builds of upstream projects require local include paths
 if(NOT cmake_build_type_lower STREQUAL "release")
