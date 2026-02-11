@@ -121,7 +121,6 @@ foreach(user_subroutine ${USER_SUBROUTINES})
     set(USER_INTERFACES ${USER_INTERFACES} "${user_subroutine}_interface")
     set(EXPORTED_LIBRARIES ${EXPORTED_LIBRARIES} "${user_subroutine}_interface")
 endforeach(user_subroutine)
-message("EXPORTED_LIBRARIES: ${EXPORTED_LIBRARIES}")
 
 # Find related, but external, projects in installed environment
 include(FetchContent)
