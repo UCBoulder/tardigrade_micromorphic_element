@@ -192,7 +192,7 @@ namespace micromorphic_material_library {
             double delta = 1e-6);
 
         //! Virtual destructor
-        virtual ~IMaterial();
+        virtual ~IMaterial() = default;
     };
 
     /*
