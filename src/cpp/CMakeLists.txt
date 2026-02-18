@@ -26,7 +26,7 @@ set(LOCAL_BUILD_INCLUDES "")
 foreach(user_subroutine ${USER_SUBROUTINES})
     add_library(
         "${user_subroutine}_interface"
-        SHARED
+        OBJECT
         "${user_subroutine}_interface.h"
         "${user_subroutine}_interface.cpp"
     )
@@ -59,9 +59,6 @@ set_target_properties(
 )
 target_compile_options(${MATERIAL_MODEL_LIBRARY} PUBLIC)
 target_link_libraries(${MATERIAL_MODEL_LIBRARY} PUBLIC tardigrade_error_tools ${USER_INTERFACES})
-#foreach(user_interface ${USER_INTERFACES})
-#    target_link_libraries(${MATERIAL_MODEL_LIBRARY} PUBLIC "$<LINK_LIBRARY:WHOLE_ARCHIVE,${user_interface}>")
-#endforeach(user_interface)
 
 # Local builds of upstream projects require local include paths
 if(NOT cmake_build_type_lower STREQUAL "release")
