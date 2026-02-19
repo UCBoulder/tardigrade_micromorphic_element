@@ -16,7 +16,7 @@ build:
     - set -x
     # Build and install c++ libraries
     - cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib  # Conda-forge feedstock must replace ``-DCMAKE_INSTALL_LIBDIR=lib`` with ``${CMAKE_ARGS}``
-    - cmake --build build --target microbalance micromat
+    - cmake --build build --target all
     - cmake --install build --prefix ${PREFIX}
   skip: true  # [win]
   run_exports:
