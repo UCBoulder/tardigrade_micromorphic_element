@@ -16,7 +16,7 @@ build:
     - set -x
     # Build and install c++ libraries
     - cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib  # Conda-forge feedstock must replace ``-DCMAKE_INSTALL_LIBDIR=lib`` with ``${CMAKE_ARGS}``
-    - cmake --build build --target micromat microbalance tardigrade_micromorphic_linear_elasticity_interface tardigrade_micromorphic_elasto_plasticity_interface
+    - cmake --build build --target micromat microbalance
     - cmake --install build --prefix ${PREFIX}
   skip: true  # [win]
   run_exports:
@@ -54,11 +54,6 @@ requirements:
     - tardigrade_micromorphic_elasto_plasticity >=1.4.2
   run:
     - eigen >=3.3.7
-    - tardigrade_error_tools >=0.9.8
-    - tardigrade_vector_tools >=0.8.7
-    - tardigrade_constitutive_tools >=0.8.5
-    - tardigrade_stress_tools >=0.6.3
-    - tardigrade_micromorphic_tools >=1.4.3
 
 test:
   requires:
