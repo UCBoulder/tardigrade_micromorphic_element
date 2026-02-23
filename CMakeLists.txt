@@ -10,6 +10,7 @@ set(CMAKE_SRC_PATH "src/cmake")
 set(DOXYGEN_SRC_PATH "docs/doxygen")
 set(SPHINX_SRC_PATH "docs/sphinx")
 
+# Add a flag for whether the python bindings should be built or not
 set(TARDIGRADE_MICROMORPHIC_ELEMENT_BUILD_PYTHON_BINDINGS
     ON
     CACHE BOOL
@@ -27,9 +28,6 @@ if(${TARDIGRADE_ERROR_TOOLS_OPT})
     add_compile_definitions(TARDIGRADE_ERROR_TOOLS_OPT)
     message(WARNING "BUILDING OPTIMIZED ERROR TOOLS. NO ERRORS WILL BE CAUGHT")
 endif()
-
-# Add the cmake folder to locate project CMake module(s)
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/${CMAKE_SRC_PATH}" ${CMAKE_MODULE_PATH})
 
 # Add the cmake folder to locate project CMake module(s)
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/${CMAKE_SRC_PATH}" ${CMAKE_MODULE_PATH})
@@ -53,13 +51,11 @@ endif()
 if(${not_conda_test} STREQUAL "true")
     if(DEFINED ENV{PREFIX})
         set(Python_ROOT_DIR "$ENV{BUILD_PREFIX}/bin")
-    elseif(DEFINED ENV{CONDA_PREFIX})
-        set(Python_ROOT_DIR "$ENV{CONDA_PREFIX}/bin")
     endif()
     set(Python_FIND_STRATEGY LOCATION)
     find_package(Python COMPONENTS Interpreter REQUIRED)
     execute_process(
-        COMMAND python -m setuptools_scm
+        COMMAND ${Python_EXECUTABLE} -m setuptools_scm
         OUTPUT_VARIABLE ${PROJECT_NAME}_VERSION_STRING_FULL
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
@@ -82,7 +78,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -ggdb")
 endif()
 
 # Enable CTest
@@ -99,7 +95,7 @@ set_property(GLOBAL PROPERTY CLANG_FORMAT_SOURCE_FILES)
 
 # Find eigen
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
-include_directories(iSYSTEM ${EIGEN3_INCLUDE_DIR})
+include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
 if(EIGEN3_FOUND)
     message(STATUS "Found Eigen3: ${EIGEN3_INCLUDE_DIR}")
 endif()
@@ -112,9 +108,6 @@ set(MATERIAL_MODEL_LIBRARY "micromat")
 set(MATERIAL_MODEL_LIBRARY_FILENAME "micromorphic_material_library")
 set(USER_SUBROUTINES "tardigrade_micromorphic_linear_elasticity" "tardigrade_micromorphic_elasto_plasticity")
 set(USER_LIBRARIES ${BALANCE_EQUATION_LIBRARY} ${MATERIAL_MODEL_LIBRARY})
-#foreach(library ${USER_LIBRARIES})
-#    set(EXPORTED_LIBRARIES ${EXPORTED_LIBRARIES} "${library}")
-#endforeach(library)
 
 set(USER_INTERFACES "")
 foreach(user_subroutine ${USER_SUBROUTINES})

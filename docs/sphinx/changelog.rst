@@ -6,7 +6,25 @@ Changelog
 #########
 
 ******************
-1.4.5 (unreleased)
+1.4.7 (unreleased)
+******************
+
+******************
+1.4.6 (2026-02-19)
+******************
+
+Internal Changes
+================
+- Updated conda build to reflect upstream format (:pull:`17`). By `Nathan Miller`_.
+- Use the conda-forge micromorphic linear elasticity during test builds (:pull:`18`). By `Nathan Miller`_.
+- Use the conda-forge micromorphic elasto-plasticity during test builds (:pull:`19`). By `Nathan Miller`_.
+
+Release
+=======
+- Released version (:pull:`20`). By `Nathan Miller`_.
+
+******************
+1.4.5 (2025-05-27)
 ******************
 
 New Features
@@ -16,10 +34,15 @@ New Features
 Internal Changes
 ================
 - Updated the tests to reflect changes to the micro gradient plasticity evolution algorithm (:pull:`14`). By `Nathan Miller`_.
+- Preparing for conda packaging (:pull:`15`). By `Nathan Miller`_.
 
 Bug Fixes
 =========
 - Corrected issues with building the python interface (:pull:`13`). By `Nathan Miller`_.
+
+Release
+=======
+- Released version (:pull:`16`). By `Nathan Miller`_.
 
 ******************
 1.4.4 (2024-11-26)
