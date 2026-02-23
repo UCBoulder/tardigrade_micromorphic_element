@@ -2,7 +2,6 @@
 # 1. Add micro/patch bump for nonzero commits since most recent Git tag
 # 2. Mimic setuptools_scm default string formatting with VERSION_STRING_FULL
 
-
 # Source: https://github.com/fakenmc/cmake-git-semver
 #
 # This cmake module sets the project version and partial version
@@ -46,110 +45,120 @@ endif()
 
 # Check if git is found...
 if(GIT_FOUND AND VERSION_UPDATE_FROM_GIT)
+    # Get last tag from git
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE} describe --abbrev=0 --tags
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        OUTPUT_VARIABLE ${PROJECT_NAME}_RECENT_GIT_TAG
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
 
-	# Get last tag from git
-	execute_process(COMMAND ${GIT_EXECUTABLE} describe --abbrev=0 --tags
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-		OUTPUT_VARIABLE ${PROJECT_NAME}_RECENT_GIT_TAG
-		OUTPUT_STRIP_TRAILING_WHITESPACE)
+    #How many commits since last tag
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE} rev-list ${${PROJECT_NAME}_RECENT_GIT_TAG}..HEAD --count
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        OUTPUT_VARIABLE ${PROJECT_NAME}_VERSION_AHEAD
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
 
-	#How many commits since last tag
-	execute_process(COMMAND ${GIT_EXECUTABLE} rev-list ${${PROJECT_NAME}_RECENT_GIT_TAG}..HEAD --count
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-		OUTPUT_VARIABLE ${PROJECT_NAME}_VERSION_AHEAD
-		OUTPUT_STRIP_TRAILING_WHITESPACE)
+    # Get current commit SHA from git
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        OUTPUT_VARIABLE ${PROJECT_NAME}_VERSION_GIT_SHA
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
 
-	# Get current commit SHA from git
-	execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-		OUTPUT_VARIABLE ${PROJECT_NAME}_VERSION_GIT_SHA
-		OUTPUT_STRIP_TRAILING_WHITESPACE)
+    # Get partial versions into a list
+    string(REGEX MATCHALL "-.*$|[0-9]+" ${PROJECT_NAME}_PARTIAL_VERSION_LIST ${${PROJECT_NAME}_RECENT_GIT_TAG})
 
-	# Get partial versions into a list
-	string(REGEX MATCHALL "-.*$|[0-9]+" ${PROJECT_NAME}_PARTIAL_VERSION_LIST
-		${${PROJECT_NAME}_RECENT_GIT_TAG})
+    # Set the version numbers
+    list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 0 ${PROJECT_NAME}_VERSION_MAJOR)
+    list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 1 ${PROJECT_NAME}_VERSION_MINOR)
+    list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 2 ${PROJECT_NAME}_VERSION_PATCH)
 
-	# Set the version numbers
-	list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST
-		0 ${PROJECT_NAME}_VERSION_MAJOR)
-	list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST
-		1 ${PROJECT_NAME}_VERSION_MINOR)
-	list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST
-		2 ${PROJECT_NAME}_VERSION_PATCH)
-
-	# The tweak part is optional, so check if the list contains it
+    # The tweak part is optional, so check if the list contains it
     # FIXME: tweak numbers don't work. This  project doesn't use tweak numbers.
-	list(LENGTH ${PROJECT_NAME}_PARTIAL_VERSION_LIST
-		${PROJECT_NAME}_PARTIAL_VERSION_LIST_LEN)
-	if(${PROJECT_NAME}_PARTIAL_VERSION_LIST_LEN GREATER 3)
-		list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 3 ${PROJECT_NAME}_VERSION_TWEAK)
-		string(SUBSTRING ${${PROJECT_NAME}_VERSION_TWEAK} 1 -1 ${PROJECT_NAME}_VERSION_TWEAK)
-	endif()
+    list(LENGTH ${PROJECT_NAME}_PARTIAL_VERSION_LIST ${PROJECT_NAME}_PARTIAL_VERSION_LIST_LEN)
+    if(${PROJECT_NAME}_PARTIAL_VERSION_LIST_LEN GREATER 3)
+        list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 3 ${PROJECT_NAME}_VERSION_TWEAK)
+        string(SUBSTRING ${${PROJECT_NAME}_VERSION_TWEAK} 1 -1 ${PROJECT_NAME}_VERSION_TWEAK)
+    endif()
 
     # Bump the patch/micro version when tag doesn't describe current commit
     # Anticipates the current commit as part of the next release
-    if(NOT ${PROJECT_NAME}_VERSION_AHEAD STREQUAL  "0")
+    if(NOT ${PROJECT_NAME}_VERSION_AHEAD STREQUAL "0")
         math(EXPR ${PROJECT_NAME}_VERSION_PATCH "${${PROJECT_NAME}_VERSION_PATCH} + 1")
         set(${PROJECT_NAME}_VERSION_TWEAK "")
     endif()
 
-	# Unset the list
-	unset(${PROJECT_NAME}_PARTIAL_VERSION_LIST)
+    # Unset the list
+    unset(${PROJECT_NAME}_PARTIAL_VERSION_LIST)
 
     # Set project release version, e.g. numbers only version for CMake
-    string(CONCAT ${PROJECT_NAME}_VERSION
-           "${${PROJECT_NAME}_VERSION_MAJOR}"
-           ".${${PROJECT_NAME}_VERSION_MINOR}"
-           ".${${PROJECT_NAME}_VERSION_PATCH}")
+    string(
+        CONCAT ${PROJECT_NAME}_VERSION
+        "${${PROJECT_NAME}_VERSION_MAJOR}"
+        ".${${PROJECT_NAME}_VERSION_MINOR}"
+        ".${${PROJECT_NAME}_VERSION_PATCH}"
+    )
     if(${PROJECT_NAME}_VERSION_TWEAK)
-    	string(CONCAT ${PROJECT_NAME}_VERSION
-               "${${PROJECT_NAME}_VERSION}"
-               ".${${PROJECT_NAME}_VERSION_TWEAK}")
+        string(CONCAT ${PROJECT_NAME}_VERSION "${${PROJECT_NAME}_VERSION}" ".${${PROJECT_NAME}_VERSION_TWEAK}")
     endif()
 
-	# Set full project version string.
+    # Set full project version string.
     # Git tag matches commit:
     #     <major>.<minor>.<patch>(.<tweak>)+<commit short hash>, e.g. 3.2.1(.123)+a1s2d3f
     # Git tag before commit:
     #     <major>.<minor>.<patch>(.<tweak>).dev<commit count>+<commit short hash>, e.g. 3.2.1.dev99+a1s2d3f
-	set(${PROJECT_NAME}_VERSION_STRING_FULL
-        ${${PROJECT_NAME}_VERSION})
-    if(NOT ${PROJECT_NAME}_VERSION_AHEAD STREQUAL  "0")
-	    string(CONCAT ${PROJECT_NAME}_VERSION_STRING_FULL
-               "${${PROJECT_NAME}_VERSION_STRING_FULL}"
-               ".dev${${PROJECT_NAME}_VERSION_AHEAD}")
+    set(${PROJECT_NAME}_VERSION_STRING_FULL ${${PROJECT_NAME}_VERSION})
+    if(NOT ${PROJECT_NAME}_VERSION_AHEAD STREQUAL "0")
+        string(
+            CONCAT ${PROJECT_NAME}_VERSION_STRING_FULL
+            "${${PROJECT_NAME}_VERSION_STRING_FULL}"
+            ".dev${${PROJECT_NAME}_VERSION_AHEAD}"
+        )
     endif()
-	string(CONCAT ${PROJECT_NAME}_VERSION_STRING_FULL
-           "${${PROJECT_NAME}_VERSION_STRING_FULL}"
-           "+${${PROJECT_NAME}_VERSION_GIT_SHA}")
+    string(
+        CONCAT ${PROJECT_NAME}_VERSION_STRING_FULL
+        "${${PROJECT_NAME}_VERSION_STRING_FULL}"
+        "+${${PROJECT_NAME}_VERSION_GIT_SHA}"
+    )
 
-	# Save version to file (which will be used when Git is not available
-	# or VERSION_UPDATE_FROM_GIT is disabled)
-	file(WRITE ${CMAKE_SOURCE_DIR}/VERSION
-             ${${PROJECT_NAME}_VERSION}
-         "*" ${${PROJECT_NAME}_VERSION_STRING_FULL}
-		 "*" ${${PROJECT_NAME}_RECENT_GIT_TAG}
-		 "*" ${${PROJECT_NAME}_VERSION_MAJOR}
-		 "*" ${${PROJECT_NAME}_VERSION_MINOR}
-		 "*" ${${PROJECT_NAME}_VERSION_PATCH}
-		 "*" ${${PROJECT_NAME}_VERSION_TWEAK}
-		 "*" ${${PROJECT_NAME}_VERSION_AHEAD}
-		 "*" ${${PROJECT_NAME}_VERSION_GIT_SHA})
-
+    # Save version to file (which will be used when Git is not available
+    # or VERSION_UPDATE_FROM_GIT is disabled)
+    file(
+        WRITE ${CMAKE_SOURCE_DIR}/VERSION
+        ${${PROJECT_NAME}_VERSION}
+        "*"
+        ${${PROJECT_NAME}_VERSION_STRING_FULL}
+        "*"
+        ${${PROJECT_NAME}_RECENT_GIT_TAG}
+        "*"
+        ${${PROJECT_NAME}_VERSION_MAJOR}
+        "*"
+        ${${PROJECT_NAME}_VERSION_MINOR}
+        "*"
+        ${${PROJECT_NAME}_VERSION_PATCH}
+        "*"
+        ${${PROJECT_NAME}_VERSION_TWEAK}
+        "*"
+        ${${PROJECT_NAME}_VERSION_AHEAD}
+        "*"
+        ${${PROJECT_NAME}_VERSION_GIT_SHA}
+    )
 else()
-
-	# Git not available, get version from file
-	file(STRINGS ${CMAKE_SOURCE_DIR}/VERSION ${PROJECT_NAME}_VERSION_LIST)
-	string(REPLACE "*" ";" ${PROJECT_NAME}_VERSION_LIST ${${PROJECT_NAME}_VERSION_LIST})
-	# Set partial versions
-	list(GET ${PROJECT_NAME}_VERSION_LIST 0 ${PROJECT_NAME}_VERSION)
-	list(GET ${PROJECT_NAME}_VERSION_LIST 1 ${PROJECT_NAME}_VERSION_STRING_FULL)
-	list(GET ${PROJECT_NAME}_VERSION_LIST 2 ${PROJECT_NAME}_RECENT_GIT_TAG)
-	list(GET ${PROJECT_NAME}_VERSION_LIST 3 ${PROJECT_NAME}_VERSION_MAJOR)
-	list(GET ${PROJECT_NAME}_VERSION_LIST 4 ${PROJECT_NAME}_VERSION_MINOR)
-	list(GET ${PROJECT_NAME}_VERSION_LIST 5 ${PROJECT_NAME}_VERSION_PATCH)
-	list(GET ${PROJECT_NAME}_VERSION_LIST 6 ${PROJECT_NAME}_VERSION_TWEAK)
-	list(GET ${PROJECT_NAME}_VERSION_LIST 7 ${PROJECT_NAME}_VERSION_AHEAD)
-	list(GET ${PROJECT_NAME}_VERSION_LIST 8 ${PROJECT_NAME}_VERSION_GIT_SHA)
-
+    # Git not available, get version from file
+    file(STRINGS ${CMAKE_SOURCE_DIR}/VERSION ${PROJECT_NAME}_VERSION_LIST)
+    string(REPLACE "*" ";" ${PROJECT_NAME}_VERSION_LIST ${${PROJECT_NAME}_VERSION_LIST})
+    # Set partial versions
+    list(GET ${PROJECT_NAME}_VERSION_LIST 0 ${PROJECT_NAME}_VERSION)
+    list(GET ${PROJECT_NAME}_VERSION_LIST 1 ${PROJECT_NAME}_VERSION_STRING_FULL)
+    list(GET ${PROJECT_NAME}_VERSION_LIST 2 ${PROJECT_NAME}_RECENT_GIT_TAG)
+    list(GET ${PROJECT_NAME}_VERSION_LIST 3 ${PROJECT_NAME}_VERSION_MAJOR)
+    list(GET ${PROJECT_NAME}_VERSION_LIST 4 ${PROJECT_NAME}_VERSION_MINOR)
+    list(GET ${PROJECT_NAME}_VERSION_LIST 5 ${PROJECT_NAME}_VERSION_PATCH)
+    list(GET ${PROJECT_NAME}_VERSION_LIST 6 ${PROJECT_NAME}_VERSION_TWEAK)
+    list(GET ${PROJECT_NAME}_VERSION_LIST 7 ${PROJECT_NAME}_VERSION_AHEAD)
+    list(GET ${PROJECT_NAME}_VERSION_LIST 8 ${PROJECT_NAME}_VERSION_GIT_SHA)
 endif()
