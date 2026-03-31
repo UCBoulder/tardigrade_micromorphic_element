@@ -6,8 +6,20 @@ Changelog
 #########
 
 ******************
-1.4.7 (unreleased)
+1.4.8 (unreleased)
 ******************
+
+******************
+1.4.7 (2026-03-31)
+******************
+
+Internal Changes
+================
+- Accommodated breaking changes from eigen packaging (:pull:`21`). By `Nathan Miller`_.
+
+Release
+=======
+- Released version (:pull:`22`). By `Nathan Miller`_.
 
 ******************
 1.4.6 (2026-02-19)

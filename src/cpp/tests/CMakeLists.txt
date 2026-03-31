@@ -3,7 +3,7 @@ set(TEST_NAME "test_${BALANCE_EQUATION_LIBRARY}")
 add_executable(${TEST_NAME} "test_${BALANCE_EQUATION_LIBRARY_FILENAME}.cpp")
 add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
 target_compile_options(${TEST_NAME} PRIVATE)
-target_link_libraries(${TEST_NAME} PUBLIC ${BALANCE_EQUATION_LIBRARY})
+target_link_libraries(${TEST_NAME} PUBLIC ${BALANCE_EQUATION_LIBRARY} Eigen3::Eigen)
 
 get_target_property(target_sources "test_${BALANCE_EQUATION_LIBRARY}" SOURCES)
 foreach(source ${target_sources})
@@ -27,7 +27,7 @@ foreach(user_subroutine ${USER_SUBROUTINES})
     add_executable(${TEST_NAME} "${TEST_NAME}.cpp")
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
     target_compile_options(${TEST_NAME} PRIVATE)
-    target_link_libraries(${TEST_NAME} PUBLIC ${MATERIAL_MODEL_LIBRARY} ${user_subroutine})
+    target_link_libraries(${TEST_NAME} PUBLIC ${MATERIAL_MODEL_LIBRARY} ${user_subroutine} Eigen3::Eigen)
 
     if(NOT cmake_build_type_lower STREQUAL "release")
         target_include_directories(

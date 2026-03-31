@@ -94,10 +94,17 @@ set_property(GLOBAL PROPERTY CLANG_FORMAT_SOURCE_FILES)
 #=============================================================================================== ADD PROJECT TARGETS ===
 
 # Find eigen
-find_package(Eigen3 3.3 REQUIRED NO_MODULE)
-include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
+find_package(Eigen3 3.3 NO_MODULE)
 if(EIGEN3_FOUND)
-    message(STATUS "Found Eigen3: ${EIGEN3_INCLUDE_DIR}")
+    message(STATUS "Found Eigen3 (less than version 3.4.1): ${EIGEN3_INCLUDE_DIR}")
+else()
+    find_package(Eigen3 3.4...5 NO_MODULE)
+    if(EIGEN3_FOUND)
+        message(STATUS "Found Eigen3 (less than version 5): ${EIGEN3_INCLUDE_DIR}")
+    else()
+        find_package(Eigen3 5 REQUIRED NO_MODULE)
+        message(STATUS "Found Eigen3 (version 5): ${EIGEN3_INCLUDE_DIR}")
+    endif()
 endif()
 
 # Set the additional subroutines to be incorporated
