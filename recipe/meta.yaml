@@ -44,6 +44,7 @@ requirements:
     - setuptools >=77
     - setuptools_scm >=8
     - eigen >=3.3.7
+    - eigen-abi-devel
     - tardigrade_error_tools >=0.9.8
     - tardigrade_vector_tools >=0.8.7
     - tardigrade_constitutive_tools >=0.8.5

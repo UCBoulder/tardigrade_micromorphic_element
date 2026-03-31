@@ -8,7 +8,7 @@ add_library(
     "${BALANCE_EQUATION_LIBRARY_FILENAME}.h"
 )
 set_target_properties(${BALANCE_EQUATION_LIBRARY} PROPERTIES PUBLIC_HEADER ${BALANCE_EQUATION_LIBRARY_FILENAME}.h)
-target_link_libraries(${BALANCE_EQUATION_LIBRARY} tardigrade_error_tools)
+target_link_libraries(${BALANCE_EQUATION_LIBRARY} tardigrade_error_tools Eigen3::Eigen)
 target_compile_options(${BALANCE_EQUATION_LIBRARY} PUBLIC)
 
 # Local builds of upstream projects require local include paths
@@ -32,7 +32,7 @@ foreach(user_subroutine ${USER_SUBROUTINES})
     )
     set_target_properties("${user_subroutine}_interface" PROPERTIES PUBLIC_HEADER "${user_subroutine}_interface.h")
     target_compile_options("${user_subroutine}_interface" PUBLIC)
-    target_link_libraries("${user_subroutine}_interface" tardigrade_error_tools ${user_subroutine})
+    target_link_libraries("${user_subroutine}_interface" tardigrade_error_tools ${user_subroutine} Eigen3::Eigen)
     if(NOT cmake_build_type_lower STREQUAL "release")
         set(LOCAL_BUILD_INCLUDES ${LOCAL_BUILD_INCLUDES} "${${user_subroutine}_SOURCE_DIR}/${CPP_SRC_PATH}")
         target_include_directories(
@@ -58,7 +58,7 @@ set_target_properties(
     PROPERTIES PUBLIC_HEADER "${MATERIAL_MODEL_LIBRARY_FILENAME}.h" SUFFIX ".so"
 )
 target_compile_options(${MATERIAL_MODEL_LIBRARY} PUBLIC)
-target_link_libraries(${MATERIAL_MODEL_LIBRARY} PUBLIC tardigrade_error_tools ${USER_INTERFACES})
+target_link_libraries(${MATERIAL_MODEL_LIBRARY} PUBLIC tardigrade_error_tools ${USER_INTERFACES} Eigen3::Eigen)
 
 # Local builds of upstream projects require local include paths
 if(NOT cmake_build_type_lower STREQUAL "release")
