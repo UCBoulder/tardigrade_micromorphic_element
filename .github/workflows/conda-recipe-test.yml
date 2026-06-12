@@ -36,4 +36,4 @@ jobs:
         run: conda install --file conda-build.txt --yes --channel conda-forge
       - name: Conda-Build
         shell: bash -el {0}
-        run: conda mambabuild recipe --channel conda-forge --no-anaconda-upload
+        run: rattler-build build --recipe-dir ./recipe --channel conda-forge
