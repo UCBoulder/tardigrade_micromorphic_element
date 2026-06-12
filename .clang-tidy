@@ -1,3 +1,4 @@
 Checks: "clang-diagnostic-*,clang-analyzer-*,-clang-analyzer-optin.performance.Padding,readability-inconsistent-declaration-parameter-name"
 HeaderFilterRegex: .*
 WarningsAsErrors: "clang-diagnostic-*,clang-analyzer-*,-clang-analyzer-optin.performance.Padding,readability-inconsistent-declaration-parameter-name"
+RemovedArgs: ['-fno-merge-constants']
